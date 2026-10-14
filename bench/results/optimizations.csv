@@ -18,3 +18,12 @@ watcher,"Loops with no more elements than threads start a helper that brings in 
 watchall,"That helper for every such loop","stress test: loops finished in 20 s, 2 loops per thread at once",63,38837,7420,loops,"no: short loops of a few elements went from 0.5 to 7–11 µs"
 hint,"That helper only for loop bodies whose first iteration took 20 µs or more last time, or that never ran","stress test: loops finished in 20 s, 2 loops per thread at once",63,7420,34060,loops,yes
 heartbeat,"One heartbeat task per process watching such loops instead of a helper per loop","stress test: loops finished in 20 s, 2 loops per thread at once",63,34060,8599,loops,"no: short loops 0.5 to 1.3–2.9 µs, and help arrives one wake-up later"
+nosteal,"Steal as many iterations as from one's own block, not about half of what is left there","1M-element axpy, back to back",32,52.8,52.1,µs,"yes: no measurable difference at 8 or 32 threads, and simpler"
+notree,"Remove the rule that each new helper asks for two more","1,000-element triangle",32,149.3,335.7,µs,no
+noshare,"Remove the per-chunk cap at half an even share of what is left","1,000-element triangle",32,149.3,575.8,µs,no
+nospin,"Block at once instead of spinning 20 µs for the last chunks","1,000-element triangle",32,149.3,182.2,µs,"no: also 5–11% slower on 300k–10M-element axpy"
+nogrow,"Remove the 2x limit on chunk growth","300-element triangle",32,61.6,288.4,µs,"no: concurrent small loops gain (167 to 237 per ms) only because they stop starting helpers"
+globalq,"A global limit on queued helpers, one per thread","300k-element axpy, back to back",32,61.1,79.3,µs,"no: concurrent loops 160 to 234 per ms, but single loops 20–60% slower"
+precap,"Before the first helper, chunks of at most 2.5 µs of predicted work","300-element triangle",32,61.1,61.3,µs,no
+specentry,"pforeach entry specialized on the loop body (the scheduler still is not)","64-element loop of cheap iterations",32,540,253,ns,"yes: and a new body compiles in 14 instead of 17 ms"
+xadd,"Block claims with one lock xadd instead of the compare-and-swap loop Julia emits for atomic +","1M-element axpy, back to back",32,53.6,53.9,µs,"no: no measurable difference; the claims are rarely contended"

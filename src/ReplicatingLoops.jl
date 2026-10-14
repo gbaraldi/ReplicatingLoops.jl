@@ -35,8 +35,8 @@ const NO_BLOCKS = Int[]
 # What the last loop with a given body found: whether its first iteration ran
 # for WATCH_NS or more. One word per slot, indexed by a hash of the body's type:
 # the hash with its low two bits replaced by 1 (short) or 2 (long). Slots are
-# shared by hash, so a collision only makes a loop look new. Races only lose a
-# hint.
+# shared by hash, so a collision makes a loop look new (unless all 62 bits
+# match). Races only lose a hint.
 const SITES = zeros(UInt, 256)
 const SHORT, LONG = UInt(1), UInt(2)
 
@@ -83,12 +83,11 @@ function (b::Body)(c::Chunk)
 end
 
 mutable struct Loop
-    @atomic next::Int                   # iterations handed out so far
-    const pad::NTuple{7,Int}            # keep `next` on its own cache line
+    @atomic next::Int                   # iterations handed out so far, until the split
     @atomic left::Int                   # iterations not finished yet
     @atomic helpers::Int                # helper tasks started
     @atomic target::Int                 # helper tasks wanted
-    @atomic running::Int                # helper tasks that have started running
+    @atomic running::Int                # helper tasks that have started (never decremented)
     @atomic ns_per_iter::Float64        # time per iteration, for new helpers
     @atomic first_done::Bool            # the caller has finished its first chunk
     @atomic event::Union{Nothing,Threads.Event}  # set if the caller blocks
@@ -115,7 +114,7 @@ end
 # each other. Everything the caller writes before starting a helper, including
 # `blocks`, is published by `schedule` when it starts a helper.
 Loop(body::Body, n::Int, maxhelpers::Int) =
-    Loop(0, ntuple(_ -> 0, 7), n, 0, 0, 0, 0.0, false, nothing, nothing,
+    Loop(0, n, 0, 0, 0, 0.0, false, nothing, nothing,
          body, n, maxhelpers, NO_BLOCKS, 0, UInt64(0), UInt(0))
 
 # Every heartbeat, raise the number of helpers wanted to what the work left
@@ -128,7 +127,8 @@ Loop(body::Body, n::Int, maxhelpers::Int) =
 # twice as slow as running it alone. Returns the time of this check.
 function maybe_raise!(r::Loop, est::Float64, left::Int, now::UInt64, last::UInt64)
     now - last >= HEARTBEAT_NS || (r.nb == 0 && left * est >= EARLY_NS) || return last
-    want = min(r.maxhelpers, floor(Int, left * est / MIN_WORK_NS) - 1)
+    w = left * est / MIN_WORK_NS - 1    # may be huge: cap before converting
+    want = w >= r.maxhelpers ? r.maxhelpers : floor(Int, w)
     want > (@atomic :monotonic r.target) || return now
     r.nb == 0 && !split!(r, left * est) && return now
     # New helpers size their first chunk from this.
@@ -189,12 +189,18 @@ function work!(r::Loop, caller::Bool, helper::Int = 0)
     t0 = t = last = time_ns()
     c = Chunk(0, 0)
     home = 0   # the block this task starts on; `j` counts the blocks it has finished
-    own = false
     j = 0
     try
+        if caller && r.site != 0 && long_before(r.site) && split!(r, Inf)
+            # Here rather than in pforeach, so an exception while starting the
+            # watcher is handled like one from the body.
+            r.start = time_ns()
+            raise_target!(r, 1)
+            spawn_wanted!(r)
+        end
         if !caller && est == 0
             # Started by a watcher: the caller is still in its first chunk.
-            home, own = home_block(r, helper)
+            home = home_block(r, helper)
             watch!(r, helper, home) || return 0
         end
         while true
@@ -205,7 +211,7 @@ function work!(r::Loop, caller::Bool, helper::Int = 0)
                 else
                     # A shared count of what is left would cost a contended
                     # add per chunk; estimate it from the block this task is in.
-                    home == 0 && ((home, own) = home_block(r, helper))
+                    home == 0 && (home = home_block(r, helper))
                     j = skip_empty(r, home, j)
                     j < r.nb || break
                     left = blocks_left(r, home, j)
@@ -222,8 +228,8 @@ function work!(r::Loop, caller::Bool, helper::Int = 0)
                 k = chunk_size(r, est, k, left)
             end
             if r.nb > 0
-                home == 0 && ((home, own) = home_block(r, helper))
-                lo, hi, j = claim_block!(r, home, own, j, k, est > 0 ? max(floor(Int, MEASURE_NS / est), 1) : 1)
+                home == 0 && (home = home_block(r, helper))
+                lo, hi, j = claim_block!(r, home, j, k)
                 lo > hi && break
             else
                 # Until it cuts the loop into blocks, the caller is the only
@@ -284,7 +290,7 @@ function watch!(r::Loop, helper::Int, home::Int)
     end
     (@atomic :monotonic r.first_done) && return helper > 1
     if skip_empty(r, home, 0) < r.nb
-        raise_target!(r, min(r.maxhelpers, r.n - 1, 2helper + 1))
+        raise_target!(r, min(r.maxhelpers, 2helper + 1))
         spawn_wanted!(r)
     end
     return true
@@ -310,7 +316,7 @@ function split!(r::Loop, work_left::Float64)
     most = min(most, 1 + count(!=(me), pool))
     most >= 2 || return false
     w = clamp(floor(Int, min(work_left / MIN_WORK_NS, most)), 2, most)
-    nb = min(2w > most ? most : nextpow(2, w), most, r.n)
+    nb = min(2w > most ? most : nextpow(2, w), most)
     d = zeros(Int, STRIDE * nb + max(me, maximum(pool)))
     d[3] = me
     i = 1
@@ -335,19 +341,16 @@ function split!(r::Loop, work_left::Float64)
     return true
 end
 
-# Where a task starts taking iterations, and whether it owns that block. A task
-# owns the block of the thread it runs on. Helpers are not pinned, so one that
-# lands on a thread without a block owns block i + 1 for the i-th helper, which
-# gives each block an owner as long as there are as many helpers as blocks. Any
-# further helper, started because the loop turned out longer than first
-# measured, owns nothing and only helps.
+# The block a task starts on: the block of the thread it runs on. Helpers are
+# not pinned, so one that lands on a thread without a block starts on block
+# i + 1 for the i-th helper, which gives each block a task as long as there
+# are as many helpers as blocks.
 function home_block(r::Loop, i::Int)
     me = threadid()
     nb = r.nb
     at = STRIDE * nb + me
     b = at <= length(r.blocks) ? r.blocks[at] : 0
-    b > 0 && return b, true
-    return mod1(i + 1, nb), i + 1 <= nb
+    return b > 0 ? b : mod1(i + 1, nb)
 end
 
 # Rough count of iterations left: what is left in the block this task is on,
@@ -371,13 +374,11 @@ function skip_empty(r::Loop, home::Int, j::Int)
 end
 
 # Take up to `k` iterations from the home block, or once it is empty from the
-# next blocks in turn (`j` counts the empty ones). From a block it does not own,
-# a task takes about half of what is left, so the owner, if it shows up late,
-# still gets some, but at least `kmin` (MEASURE_NS of work): halving what is
-# left again and again would end in chunks of a few iterations, and every chunk
-# boundary costs, most of all in loops that stream through memory. Returns
-# `(lo, hi, j)`, with `lo > hi` when nothing is left.
-function claim_block!(r::Loop, home::Int, own::Bool, j::Int, k::Int, kmin::Int)
+# next blocks in turn (`j` counts the empty ones). (Taking only half of what is
+# left in another task's block, so its owner still gets some, made no
+# measurable difference.) Returns `(lo, hi, j)`, with `lo > hi` when nothing is
+# left.
+function claim_block!(r::Loop, home::Int, j::Int, k::Int)
     d = r.blocks
     nb = r.nb
     while j < nb
@@ -385,9 +386,8 @@ function claim_block!(r::Loop, home::Int, own::Bool, j::Int, k::Int, kmin::Int)
         bh = bhi(d, i)
         rest = bh - bnext(d, i)
         if rest > 0
-            kk = j == 0 && own ? k : min(k, max(cld(rest, 2), kmin))
-            hi = bclaim!(d, i, kk)
-            lo = hi - kk + 1
+            hi = bclaim!(d, i, k)
+            lo = hi - k + 1
             lo <= bh && return lo, min(hi, bh), j
         end
         j += 1
@@ -481,25 +481,23 @@ time, since starting a task makes a short loop of few elements several
 microseconds slower.
 
 `ntasks` defaults to the number of threads in the default pool, plus one when
-the caller runs outside it. If `f` throws, no further iterations are started
-and a `CompositeException` is thrown once the running ones finish.
+the caller runs outside it. If `f` throws, no further iterations are handed
+out, and a `CompositeException` is thrown once the chunks already handed out
+finish.
 """
-function pforeach(f, xs::AbstractArray; ntasks::Integer = default_ntasks())
+# Specialized on `f`, unlike the scheduler: building `Body{F,A}` without a type
+# lookup at run time halves the cost of a short loop (540 to 250 ns for 64
+# elements), and the entry is small, so a new body even compiles a little faster.
+function pforeach(f::F, xs::AbstractArray; ntasks::Integer = default_ntasks()) where {F}
     isempty(xs) && return nothing
     n = length(xs)
-    maxhelpers = max(Int(ntasks), 1) - 1
+    maxhelpers = min(max(Int(ntasks), 1), n) - 1   # never more tasks than elements
     # Every task may add one claim past CLOSED after a failure; keep that in range.
     n <= CLOSED ÷ (maxhelpers + 1) ||
         throw(ArgumentError("pforeach supports at most $(CLOSED ÷ (maxhelpers + 1)) elements with ntasks = $ntasks"))
     r = Loop(Body(f, xs), n, maxhelpers)
-    if 2 <= n <= min(maxhelpers + 1, default_ntasks())
-        r.site = site_key(f)
-        if long_before(r.site) && split!(r, Inf)
-            r.start = time_ns()
-            raise_target!(r, 1)
-            spawn_wanted!(r)
-        end
-    end
+    # Loops that may be a few long iterations get a watcher (see `watch!`).
+    2 <= n <= min(maxhelpers + 1, default_ntasks()) && (r.site = site_key(f))
     claimed = work!(r, true)
     if (@atomic r.left -= claimed) != 0
         # ^C is deferred except inside the wait itself, so a second ^C cannot

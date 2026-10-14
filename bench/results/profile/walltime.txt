@@ -1,0 +1,86 @@
+== axpy1m
+wall-clock samples of the 5111 tasks that ran pforeach code: 7201 (72801 loops; 41056 samples of other tasks left out)
+   34.7%  loop body
+   19.7%  spawn_wanted!
+   13.1%  skip_empty
+    7.6%  finish!
+    6.6%  bclaim!
+    4.0%  work!
+    3.4%  outside: ?
+    3.2%  Chunk
+    2.9%  bnext
+    1.1%  maybe_raise!
+    0.9%  wait_done
+    0.7%  split!
+    0.5%  chunk_size
+== axpy1m_cold
+wall-clock samples of the 245 tasks that ran pforeach code: 1071 (2584 loops; 39333 samples of other tasks left out)
+   61.7%  outside: systemsleep
+   12.3%  loop body
+    8.3%  spawn_wanted!
+    4.9%  bclaim!
+    4.1%  skip_empty
+    2.8%  work!
+    2.4%  bnext
+    1.8%  finish!
+    0.4%  claim_block!
+== tri300
+wall-clock samples of the 3179 tasks that ran pforeach code: 4332 (70273 loops; 34366 samples of other tasks left out)
+   28.0%  loop body
+   19.8%  spawn_wanted!
+   16.5%  skip_empty
+   15.1%  bclaim!
+    6.3%  bnext
+    6.3%  finish!
+    1.7%  Chunk
+    1.4%  work!
+    1.1%  wait_done
+    1.0%  maybe_raise!
+    0.9%  outside: ?
+    0.4%  chunk_size
+    0.4%  split!
+== spin32
+wall-clock samples of the 8734 tasks that ran pforeach code: 10453 (27956 loops; 33019 samples of other tasks left out)
+   90.9%  loop body
+    2.7%  spawn_wanted!
+    1.8%  wait_done
+    1.3%  skip_empty
+    1.1%  finish!
+    1.0%  outside: ?
+    0.5%  Chunk
+== nested
+
+[3397542] signal 11 (128): Segmentation fault
+in expression starting at /home/gbaraldi/ReplicatingLoops.jl/bench/profile/workload.jl:110
+wake_thread at /cache/build/builder-amdci4-4/julialang/julia-ci/src/scheduler.c:220 [inlined]
+wakeup_thread at /cache/build/builder-amdci4-4/julialang/julia-ci/src/scheduler.c:268
+enq_work at ./task.jl:1010
+#schedule#610 at ./task.jl:1084
+schedule at ./task.jl:1071 [inlined]
+notify at ./condition.jl:165
+#notify#393 at ./condition.jl:159 [inlined]
+notify at ./condition.jl:159 [inlined]
+notify at ./condition.jl:159 [inlined]
+notify at ./lock.jl:669
+finish! at /home/gbaraldi/ReplicatingLoops.jl/src/ReplicatingLoops.jl:412 [inlined]
+helper! at /home/gbaraldi/ReplicatingLoops.jl/src/ReplicatingLoops.jl:269 [inlined]
+#spawn_wanted!##0 at /home/gbaraldi/ReplicatingLoops.jl/src/ReplicatingLoops.jl:162
+jfptr_YY.spawn_wantedNOT.YY.YY.0_773 at /home/gbaraldi/.julia/compiled/v1.13/ReplicatingLoops/0YaHC_nIcJr.so (unknown line)
+jl_apply at /cache/build/builder-amdci4-4/julialang/julia-ci/src/julia.h:2318 [inlined]
+start_task at /cache/build/builder-amdci4-4/julialang/julia-ci/src/task.c:1285
+Allocations: 7532860 (Pool: 7532827; Big: 33); GC: 22
+Segmentation fault (core dumped)
+== small
+wall-clock samples of the 89 tasks that ran pforeach code: 1291 (13761359 loops; 53653 samples of other tasks left out)
+   52.4%  work!
+   16.1%  spawn_wanted!
+   10.1%  outside: time
+    5.7%  loop body
+    5.3%  Loop
+    2.2%  Chunk
+    2.1%  #pforeach#2
+    1.5%  skip_empty
+    1.2%  bnext
+    1.2%  bclaim!
+    0.6%  finish!
+    0.5%  default_ntasks

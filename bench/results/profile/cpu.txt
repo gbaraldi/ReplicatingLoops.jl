@@ -1,0 +1,79 @@
+== axpy1m: self time by category
+   47.4%  Julia scheduler (Base)       julia_multiq_deletemin_2433.2 38.0%, julia_multiq_check_empty_78279.2 3.7%, julia_YY.spawn_wantedNOT.YY.YY.0_772 2.5%
+   21.3%  loop body                    julia_Body_300 20.9%, jfptr_Body_301 0.5%, julia_#pforeach#2_275 0.0%
+   13.1%  Julia runtime (C)            ijl_wakeup_threadpool 6.5%, ijl_task_get_next 1.8%, ijl_apply_generic 1.6%
+   12.1%  ReplicatingLoops scheduler   julia_skip_empty_700 3.7%, julia_spawn_wantedNOT._645 3.5%, julia_claim_blockNOT._640 3.0%
+    3.4%  clock reads (vdso)           0x0000000000000b00 3.3%, 0x0000000000000b26 0.0%, __vdso_clock_gettime 0.0%
+    1.4%  kernel                       native_queued_spin_lock_slowpath 0.4%, perf_adjust_freq_unthr_context 0.2%, update_curr 0.1%
+    0.6%  libc/libm                    __sigsetjmp 0.4%, clock_gettime@@GLIBC_2.17 0.1%, __sigjmp_save 0.0%
+    0.1%  other Julia code             julia_SUM._643 0.1%, julia_SUB._624 0.0%, julia_YY.5_601 0.0%
+    0.1%  other: julia                 jl_get_pgcstack_static 0.1%, jl_pgcstack_addr_static 0.0%
+    0.0%  other: sys.so                __sigsetjmp@plt 0.0%, ijl_enter_handler@plt 0.0%, ijl_excstack_state@plt 0.0%
+    0.0%  other: 0YaHC_nIcJr.so        __divti3 0.0%, __sigsetjmp@plt 0.0%, ijl_apply_generic@plt 0.0%
+    0.0%  other: libLLVM.so.20.1jl     getPredicateResult(llvm::CmpInst::Predicate, llvm::Constant*, llvm::ValueLatticeElement const&, llvm::DataLayout const&) [clone .part.0] 0.0%, llvm::AttributeListImpl::AttributeListImpl(llvm::ArrayRef<llvm::AttributeSet>) 0.0%, llvm::CoalescerPair::isCoalescable(llvm::MachineInstr const*) const [clone .part.0] 0.0%
+== axpy1m_cold: self time by category
+   49.4%  Julia scheduler (Base)       julia_multiq_deletemin_2433.2 42.5%, julia_multiq_check_empty_78279.2 4.2%, julia_trypoptask_2426.2 0.7%
+   17.6%  loop body                    julia_Body_302 17.4%, jfptr_Body_303 0.2%, julia_#pforeach#2_277 0.0%
+   11.6%  kernel                       native_queued_spin_lock_slowpath 0.7%, srso_alias_safe_ret 0.6%, perf_adjust_freq_unthr_context 0.5%
+   11.2%  Julia runtime (C)            ijl_task_get_next 4.2%, ijl_apply_generic 3.1%, gc_mark_and_steal 0.7%
+    4.9%  ReplicatingLoops scheduler   julia_claim_blockNOT._640 2.0%, julia_skip_empty_700 1.5%, julia_workNOT._626 0.8%
+    3.2%  clock reads (vdso)           0x0000000000000b00 2.5%, __vdso_clock_gettime 0.1%, 0x0000000000000af7 0.0%
+    1.4%  libc/libm                    pthread_cond_signal@@GLIBC_2.3.2 0.3%, clock_gettime@@GLIBC_2.17 0.2%, __GI___futex_abstimed_wait_cancelable64 0.2%
+    0.1%  other Julia code             julia_SUM._643 0.1%, julia_SUB._624 0.0%, julia_InstructionStream_4199.2 0.0%
+    0.1%  other: julia                 jl_get_pgcstack_static 0.1%, jl_pgcstack_addr_static 0.0%
+    0.1%  other: sys.so                ijl_excstack_state@plt 0.0%, __sigsetjmp@plt 0.0%, ijl_enter_handler@plt 0.0%
+    0.0%  other: 0YaHC_nIcJr.so        __divti3 0.0%, ijl_pop_handler_noexcept@plt 0.0%, __sigsetjmp@plt 0.0%
+    0.0%  other: libLLVM.so.20.1jl     (anonymous namespace)::ConstraintInfo::getConstraint(llvm::CmpInst::Predicate, llvm::Value*, llvm::Value*, llvm::SmallVectorImpl<llvm::Value*>&, bool) const [clone .constprop.0] 0.0%, llvm::FPPassManager::runOnFunction(llvm::Function&) 0.0%, llvm::LiveVariables::runOnBlock(llvm::MachineBasicBlock*, unsigned int) 0.0%
+    0.0%  other: libstdc++.so.6.0.34   operator delete(void*, unsigned long, std::align_val_t) 0.0%
+== tri300: self time by category
+   50.2%  Julia scheduler (Base)       julia_multiq_deletemin_2433.2 41.1%, julia_multiq_check_empty_78279.2 4.0%, julia_YY.spawn_wantedNOT.YY.YY.0_772 2.0%
+   19.7%  loop body                    julia_sin_68133.2 16.2%, julia_Body_300 3.5%, jfptr_Body_301 0.1%
+   14.4%  ReplicatingLoops scheduler   julia_claim_blockNOT._640 6.0%, julia_skip_empty_700 3.9%, julia_spawn_wantedNOT._645 2.6%
+   11.2%  Julia runtime (C)            ijl_wakeup_threadpool 4.8%, ijl_task_get_next 2.4%, ijl_apply_generic 1.4%
+    2.6%  clock reads (vdso)           0x0000000000000b00 2.4%, 0x0000000000000b26 0.0%, __vdso_clock_gettime 0.0%
+    0.9%  kernel                       native_queued_spin_lock_slowpath 0.1%, perf_adjust_freq_unthr_context 0.1%, update_curr 0.1%
+    0.5%  libc/libm                    __sigsetjmp 0.4%, clock_gettime@@GLIBC_2.17 0.1%, __sigjmp_save 0.0%
+    0.1%  other: julia                 jl_get_pgcstack_static 0.1%, jl_pgcstack_addr_static 0.0%
+    0.1%  other Julia code             julia_SUM._643 0.1%, julia_SUB._624 0.0%, julia_YY.5_601 0.0%
+    0.0%  other: 0YaHC_nIcJr.so        __divti3 0.0%, ijl_gc_small_alloc@plt 0.0%, ijl_apply_generic@plt 0.0%
+    0.0%  other: sys.so                __sigsetjmp@plt 0.0%, ijl_enter_handler@plt 0.0%, ijl_excstack_state@plt 0.0%
+    0.0%  other: libLLVM.so.20.1jl     combineSelect(llvm::SDNode*, llvm::SelectionDAG&, llvm::TargetLowering::DAGCombinerInfo&, llvm::X86Subtarget const&) 0.0%, llvm::DWARFUnit::clear() 0.0%, llvm::ELFObjectWriter::shouldRelocateWithSymbol(llvm::MCAssembler const&, llvm::MCValue const&, llvm::MCSymbolELF const*, unsigned long, unsigned int) const 0.0%
+== spin32: self time by category
+   60.2%  clock reads (vdso)           0x0000000000000b00 50.6%, 0x0000000000000b26 0.8%, 0x0000000000000b1c 0.3%
+   24.0%  Julia scheduler (Base)       julia_multiq_deletemin_2433.2 20.9%, julia_multiq_check_empty_78279.2 2.0%, julia_YY.spawn_wantedNOT.YY.YY.0_772 0.4%
+   10.1%  Julia runtime (C)            uv__hrtime 3.9%, ijl_task_get_next 1.7%, uv_hrtime 1.4%
+    2.1%  libc/libm                    clock_gettime@@GLIBC_2.17 2.0%, __sigsetjmp 0.1%, __GI___futex_abstimed_wait_cancelable64 0.0%
+    1.6%  ReplicatingLoops scheduler   julia_spawn_wantedNOT._645 0.5%, julia_watchNOT._702 0.3%, julia_skip_empty_700 0.3%
+    0.9%  kernel                       update_curr 0.1%, perf_adjust_freq_unthr_context 0.1%, native_queued_spin_lock_slowpath 0.0%
+    0.7%  loop body                    julia_Body_300 0.7%, jfptr_Body_301 0.0%
+    0.0%  other: julia                 jl_get_pgcstack_static 0.0%, jl_pgcstack_addr_static 0.0%
+    0.0%  other: 0YaHC_nIcJr.so        __divti3 0.0%, __sigsetjmp@plt 0.0%, ijl_gc_small_alloc@plt 0.0%
+    0.0%  other Julia code             julia_SUB._624 0.0%, julia_SUM._643 0.0%, julia_YY.5_601 0.0%
+    0.0%  other: libLLVM.so.20.1jl     (anonymous namespace)::CFIInstrInserter::runOnMachineFunction(llvm::MachineFunction&) 0.0%, (anonymous namespace)::PerfJITEventListener::notifyObjectLoaded(unsigned long, llvm::object::ObjectFile const&, llvm::RuntimeDyld::LoadedObjectInfo const&) [clone .part.0] 0.0%, eliminateConstraints(llvm::Function&, llvm::DominatorTree&, llvm::LoopInfo&, llvm::ScalarEvolution&, llvm::OptimizationRemarkEmitter&) 0.0%
+    0.0%  other: sys.so                __sigsetjmp@plt 0.0%, ijl_enter_handler@plt 0.0%, ijl_excstack_state@plt 0.0%
+== nested: self time by category
+   28.2%  Julia scheduler (Base)       julia_multiq_deletemin_2433.2 19.0%, julia_multiq_insert_1446.2 3.4%, julia_multiq_check_empty_78279.2 1.3%
+   25.2%  Julia runtime (C)            ijl_wakeup_threadpool 14.2%, ijl_apply_generic 2.1%, ijl_malloc_stack 1.7%
+   23.3%  loop body                    julia_sin_68133.2 19.8%, julia_Body_339 3.0%, jfptr_Body_340 0.3%
+   13.3%  ReplicatingLoops scheduler   julia_claim_blockNOT._640 3.9%, julia_spawn_wantedNOT._645 2.9%, julia_workNOT._626 2.9%
+    5.7%  clock reads (vdso)           0x0000000000000b00 5.1%, __vdso_clock_gettime 0.1%, 0x0000000000000ab4 0.0%
+    1.6%  libc/libm                    __sigsetjmp 1.2%, clock_gettime@@GLIBC_2.17 0.3%, __sigjmp_save 0.1%
+    1.6%  kernel                       native_queued_spin_lock_slowpath 0.3%, perf_adjust_freq_unthr_context 0.1%, update_curr 0.1%
+    0.2%  other Julia code             julia_SUM._643 0.1%, julia_mapreduce_impl_683 0.1%, julia_nextpow_691 0.0%
+    0.1%  other: 0YaHC_nIcJr.so        __divti3 0.1%, ijl_gc_small_alloc@plt 0.0%, ijl_apply_generic@plt 0.0%
+    0.1%  other: sys.so                __sigsetjmp@plt 0.1%, ijl_enter_handler@plt 0.0%, ijl_excstack_state@plt 0.0%
+    0.1%  other: julia                 jl_get_pgcstack_static 0.1%, jl_pgcstack_addr_static 0.0%
+    0.0%  other: libLLVM.so.20.1jl     llvm::LiveIntervals::checkRegMaskInterference(llvm::LiveInterval const&, llvm::BitVector&) 0.0%, llvm::MetadataTracking::track(void*, llvm::Metadata&, llvm::PointerUnion<llvm::MetadataAsValue*, llvm::Metadata*, llvm::DebugValueUser*>) 0.0%, llvm::PMTopLevelManager::setLastUser(llvm::ArrayRef<llvm::Pass*>, llvm::Pass*) 0.0%
+== small: self time by category
+   45.3%  Julia scheduler (Base)       julia_multiq_deletemin_2433.2 39.7%, julia_multiq_check_empty_78279.2 3.6%, julia_trypoptask_2426.2 0.5%
+   16.5%  Julia runtime (C)            ijl_task_get_next 4.7%, ijl_apply_generic 3.7%, gc_sweep_pool_parallel.constprop.0 1.8%
+   14.8%  clock reads (vdso)           0x0000000000000b00 9.7%, 0x0000000000000869 2.4%, 0x0000000000000b26 0.2%
+    8.5%  ReplicatingLoops scheduler   julia_workNOT._626 5.9%, julia_claim_blockNOT._640 1.1%, julia_skip_empty_700 1.0%
+    8.5%  kernel                       native_queued_spin_lock_slowpath 1.5%, update_curr 0.3%, futex_wake_mark 0.3%
+    3.1%  loop body                    julia_Body_300 1.3%, jfptr_Body_301 0.9%, julia_#pforeach#2_275 0.9%
+    2.4%  libc/libm                    __sigjmp_save 1.0%, clock_gettime@@GLIBC_2.17 0.4%, pthread_cond_wait@@GLIBC_2.3.2 0.2%
+    0.2%  other Julia code             julia_run_for_259 0.2%, julia_SUM._643 0.0%, julia_IRInterpretationState_4153.2 0.0%
+    0.2%  other: julia                 jl_get_pgcstack_static 0.2%, jl_pgcstack_addr_static 0.0%
+    0.1%  other: 0YaHC_nIcJr.so        ijl_apply_generic@plt 0.1%, ijl_gc_small_alloc@plt 0.0%, __divti3 0.0%
+    0.0%  other: sys.so                __sigsetjmp@plt 0.0%, japi1_is_known_call_82596.1 0.0%, ijl_enter_handler@plt 0.0%
+    0.0%  other: libLLVM.so.20.1jl     RemoveLoadsIntoFakeUses::getPassName() const 0.0%, foldSelectIntoAddConstant(llvm::SelectInst&, llvm::IRBuilder<llvm::TargetFolder, llvm::IRBuilderCallbackInserter>&) 0.0%, llvm::DenseMapBase<llvm::DenseMap<llvm::orc::SymbolStringPtr, llvm::JITSymbolFlags, llvm::DenseMapInfo<llvm::orc::SymbolStringPtr, void>, llvm::detail::DenseMapPair<llvm::orc::SymbolStringPtr, llvm::JITSymbolFlags> >, llvm::orc::SymbolStringPtr, llvm::JITSymbolFlags, llvm::DenseMapInfo<llvm::orc::SymbolStringPtr, void>, llvm::detail::DenseMapPair<llvm::orc::SymbolStringPtr, llvm::JITSymbolFlags> >::clear() 0.0%

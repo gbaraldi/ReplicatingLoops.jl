@@ -1,0 +1,37 @@
+key,workload,source,fills_per_loop,loops
+axpy1m|local_l2,axpy1m,own L2,236053,89491
+axpy1m|local_ccx,axpy1m,own CCX's L3,9730,89491
+axpy1m|near_cache,axpy1m,"another CCX, same socket",7862,89491
+axpy1m|far_cache,axpy1m,a cache on the other socket,5187,89491
+axpy1m|dram_io_near,axpy1m,"memory, same socket",705,89491
+axpy1m|dram_io_far,axpy1m,"memory, other socket",499,89491
+axpy1m_cold|local_l2,axpy1m_cold,own L2,229533,2245
+axpy1m_cold|local_ccx,axpy1m_cold,own CCX's L3,27040,2245
+axpy1m_cold|near_cache,axpy1m_cold,"another CCX, same socket",9218,2245
+axpy1m_cold|far_cache,axpy1m_cold,a cache on the other socket,7697,2245
+axpy1m_cold|dram_io_near,axpy1m_cold,"memory, same socket",4806,2245
+axpy1m_cold|dram_io_far,axpy1m_cold,"memory, other socket",4118,2245
+tri300|local_l2,tri300,own L2,4956,78339
+tri300|local_ccx,tri300,own CCX's L3,1819,78339
+tri300|near_cache,tri300,"another CCX, same socket",1978,78339
+tri300|far_cache,tri300,a cache on the other socket,1482,78339
+tri300|dram_io_near,tri300,"memory, same socket",629,78339
+tri300|dram_io_far,tri300,"memory, other socket",542,78339
+spin32|local_l2,spin32,own L2,7857,29610
+spin32|local_ccx,spin32,own CCX's L3,1702,29610
+spin32|near_cache,spin32,"another CCX, same socket",2194,29610
+spin32|far_cache,spin32,a cache on the other socket,1242,29610
+spin32|dram_io_near,spin32,"memory, same socket",643,29610
+spin32|dram_io_far,spin32,"memory, other socket",424,29610
+nested|local_l2,nested,own L2,55607,15300
+nested|local_ccx,nested,own CCX's L3,10833,15300
+nested|near_cache,nested,"another CCX, same socket",15002,15300
+nested|far_cache,nested,a cache on the other socket,13671,15300
+nested|dram_io_near,nested,"memory, same socket",3886,15300
+nested|dram_io_far,nested,"memory, other socket",3634,15300
+small|local_l2,small,own L2,3,15833064
+small|local_ccx,small,own CCX's L3,0,15833064
+small|near_cache,small,"another CCX, same socket",0,15833064
+small|far_cache,small,a cache on the other socket,0,15833064
+small|dram_io_near,small,"memory, same socket",0,15833064
+small|dram_io_far,small,"memory, other socket",0,15833064

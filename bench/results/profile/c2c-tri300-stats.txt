@@ -1,0 +1,64 @@
+WARNING: failed to find node
+addr2line /home/gbaraldi/.julia/juliaup/julia-1.13.0+0.x64.linux.gnu/lib/julia/sys.so: could not read first record
+addr2line /home/gbaraldi/.julia/juliaup/julia-1.13.0+0.x64.linux.gnu/lib/julia/sys.so: unexpected record instead of sentineladdr2line /home/gbaraldi/.julia/juliaup/julia-1.13.0+0.x64.linux.gnu/lib/julia/sys.so: unexpected record instead of sentinel=================================================
+            Trace Event Information              
+=================================================
+  Total records                     :     437070
+  Locked Load/Store Operations      :        459
+  Load Operations                   :     105534
+  Loads - uncacheable               :          0
+  Loads - IO                        :          0
+  Loads - Miss                      :          0
+  Loads - no mapping                :       3522
+  Load Fill Buffer Hit              :          0
+  Load L1D hit                      :      99631
+  Load L2D hit                      :        607
+  Load LLC hit                      :        258
+  Load Local HITM                   :        110
+  Load Remote HITM                  :       1038
+  Load Remote HIT                   :          0
+  Load Local DRAM                   :        159
+  Load Remote DRAM                  :        131
+  Load MESI State Exclusive         :        290
+  Load MESI State Shared            :          0
+  Load LLC Misses                   :       1328
+  Load access blocked by data       :          0
+  Load access blocked by address    :          0
+  Load HIT Local Peer               :          0
+  Load HIT Remote Peer              :          0
+  LLC Misses to Local DRAM          :       12.0%
+  LLC Misses to Remote DRAM         :        9.9%
+  LLC Misses to Remote cache (HIT)  :        0.0%
+  LLC Misses to Remote cache (HITM) :       78.2%
+  Store Operations                  :      34290
+  Store - uncacheable               :          1
+  Store - no mapping                :        356
+  Store L1D Hit                     :      31356
+  Store L1D Miss                    :          0
+  Store No available memory level   :       1051
+  No Page Map Rejects               :       2584
+  Unable to parse data source       :     297246
+
+=================================================
+    Global Shared Cache Line Event Information   
+=================================================
+  Total Shared Cache Lines          :        266
+  Load HITs on shared lines         :      25190
+  Fill Buffer Hits on shared lines  :          0
+  L1D hits on shared lines          :      23661
+  L2D hits on shared lines          :        175
+  LLC hits on shared lines          :        137
+  Load hits on peer cache or nodes  :          0
+  Locked Access on shared lines     :        372
+  Blocked Access on shared lines    :          0
+  Store HITs on shared lines        :       7229
+  Store L1D hits on shared lines    :       5410
+  Store No available memory level   :        753
+  Total Merged records              :       8377
+
+=================================================
+                 c2c details                     
+=================================================
+  Events                            : ibs_op//
+  Cachelines sort on                : Total HITMs
+  Cacheline data grouping           : offset,iaddr

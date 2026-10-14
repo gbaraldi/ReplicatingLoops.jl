@@ -34,7 +34,7 @@ template <class F> static double bench_ns(F f) {
     double t = now_s();
     f();
     t = now_s() - t;
-    while (t * inner < 2e-3) {
+    while (t < 2e-3) {  // t is the time of the whole batch of `inner` calls
         inner *= 2;
         t = now_s();
         for (long i = 0; i < inner; i++) f();

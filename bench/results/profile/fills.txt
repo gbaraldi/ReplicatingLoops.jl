@@ -1,0 +1,78 @@
+== axpy1m
+Events disabled
+Events enabled
+Events disabled
+axpy1m: 89491 loops in 5.0 s, 55.9 µs each
+21124602103,,ls_dmnd_fills_from_sys.local_l2,100490948218,62.00,,
+870787609,,ls_dmnd_fills_from_sys.local_ccx,100556267213,62.00,,
+703587818,,ls_dmnd_fills_from_sys.near_cache,100633704066,62.00,,
+464172624,,ls_dmnd_fills_from_sys.far_cache,100690530544,62.00,,
+63046977,,ls_dmnd_fills_from_sys.dram_io_near,100685377021,62.00,,
+44667232,,ls_dmnd_fills_from_sys.dram_io_far,100531239939,62.00,,
+319627911239,,instructions,100396089781,62.00,0.62,insn per cycle
+517100890010,,cycles,100331246257,62.00,,
+== axpy1m_cold
+Events disabled
+Events enabled
+Events disabled
+axpy1m_cold: 2245 loops in 5.0 s, 2227.2 µs each
+515301437,,ls_dmnd_fills_from_sys.local_l2,8980843862,62.00,,
+60703866,,ls_dmnd_fills_from_sys.local_ccx,8992897342,62.00,,
+20693917,,ls_dmnd_fills_from_sys.near_cache,8954335510,62.00,,
+17279514,,ls_dmnd_fills_from_sys.far_cache,8919949727,62.00,,
+10788815,,ls_dmnd_fills_from_sys.dram_io_near,8943548199,62.00,,
+9244022,,ls_dmnd_fills_from_sys.dram_io_far,8950276557,62.00,,
+31268725461,,instructions,8943736190,62.00,1.57,insn per cycle
+19950102223,,cycles,8917732742,62.00,,
+== tri300
+Events disabled
+Events enabled
+Events disabled
+tri300: 78339 loops in 5.0 s, 63.8 µs each
+388274126,,ls_dmnd_fills_from_sys.local_l2,102037964529,62.00,,
+142531610,,ls_dmnd_fills_from_sys.local_ccx,102055260429,62.00,,
+154962136,,ls_dmnd_fills_from_sys.near_cache,102090165133,62.00,,
+116091586,,ls_dmnd_fills_from_sys.far_cache,102093651088,62.00,,
+49250423,,ls_dmnd_fills_from_sys.dram_io_near,102100176622,62.00,,
+42424451,,ls_dmnd_fills_from_sys.dram_io_far,102072161349,62.00,,
+524904382829,,instructions,102016641263,62.00,1.00,insn per cycle
+525841025166,,cycles,101945573770,62.00,,
+== spin32
+Events disabled
+Events enabled
+Events disabled
+spin32: 29610 loops in 5.0 s, 168.9 µs each
+232632949,,ls_dmnd_fills_from_sys.local_l2,101463731125,62.00,,
+50402612,,ls_dmnd_fills_from_sys.local_ccx,101602088030,62.00,,
+64960396,,ls_dmnd_fills_from_sys.near_cache,101687757594,62.00,,
+36761009,,ls_dmnd_fills_from_sys.far_cache,101671714804,62.00,,
+19039833,,ls_dmnd_fills_from_sys.dram_io_near,101623770991,62.00,,
+12567353,,ls_dmnd_fills_from_sys.dram_io_far,101567273398,62.00,,
+714089856526,,instructions,101464119686,62.00,1.37,insn per cycle
+522802607938,,cycles,101388849314,62.00,,
+== nested
+Events disabled
+Events enabled
+Events disabled
+nested: 15300 loops in 5.0 s, 326.8 µs each
+850780116,,ls_dmnd_fills_from_sys.local_l2,97680280740,62.00,,
+165747539,,ls_dmnd_fills_from_sys.local_ccx,97660457516,62.00,,
+229525580,,ls_dmnd_fills_from_sys.near_cache,97597173809,62.00,,
+209173544,,ls_dmnd_fills_from_sys.far_cache,97546741198,62.00,,
+59460506,,ls_dmnd_fills_from_sys.dram_io_near,97507605119,62.00,,
+55593953,,ls_dmnd_fills_from_sys.dram_io_far,97538884898,62.00,,
+352311266345,,instructions,97574547916,62.00,0.71,insn per cycle
+498316610738,,cycles,97615247658,62.00,,
+== small
+Events disabled
+Events enabled
+Events disabled
+small: 15833064 loops in 5.0 s, 0.3 µs each
+43779479,,ls_dmnd_fills_from_sys.local_l2,7446376871,57.00,,
+7342697,,ls_dmnd_fills_from_sys.local_ccx,7692398433,59.00,,
+4396375,,ls_dmnd_fills_from_sys.near_cache,8104257728,62.00,,
+1714033,,ls_dmnd_fills_from_sys.far_cache,8639649150,66.00,,
+2331259,,ls_dmnd_fills_from_sys.dram_io_near,8783868701,67.00,,
+770743,,ls_dmnd_fills_from_sys.dram_io_far,8459088892,65.00,,
+50808601186,,instructions,8108882431,62.00,1.83,insn per cycle
+27809948753,,cycles,7653535718,58.00,,

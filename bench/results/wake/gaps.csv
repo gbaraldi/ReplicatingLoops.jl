@@ -1,37 +1,37 @@
 key,impl,julia,sleep,mode,us,speedup
-oneTBB|C++|allowed|back to back,oneTBB,C++,allowed,back to back,87.1,2.56
-oneTBB|C++|allowed|after 2 ms idle,oneTBB,C++,allowed,after 2 ms idle,111.0,2.01
-oneTBB|C++|allowed|after 50 ms idle,oneTBB,C++,allowed,after 50 ms idle,228.4,0.975
-oneTBB affinity|C++|allowed|back to back,oneTBB affinity,C++,allowed,back to back,53.0,4.21
-oneTBB affinity|C++|allowed|after 2 ms idle,oneTBB affinity,C++,allowed,after 2 ms idle,95.2,2.34
-oneTBB affinity|C++|allowed|after 50 ms idle,oneTBB affinity,C++,allowed,after 50 ms idle,228.9,0.973
-Polyester|1.13|allowed|back to back,Polyester,1.13,allowed,back to back,17.8,11.6
-Polyester|1.13|allowed|after 2 ms idle,Polyester,1.13,allowed,after 2 ms idle,18.3,11.3
-Polyester|1.13|allowed|after 50 ms idle,Polyester,1.13,allowed,after 50 ms idle,144.8,1.43
-pforeach|1.13|allowed|back to back,pforeach,1.13,allowed,back to back,51.8,3.99
-pforeach|1.13|allowed|after 2 ms idle,pforeach,1.13,allowed,after 2 ms idle,72.6,2.84
-pforeach|1.13|allowed|after 50 ms idle,pforeach,1.13,allowed,after 50 ms idle,213.2,0.968
-Polyester|1.13|never|back to back,Polyester,1.13,never,back to back,17.9,11.5
-Polyester|1.13|never|after 2 ms idle,Polyester,1.13,never,after 2 ms idle,18.6,11.1
-Polyester|1.13|never|after 50 ms idle,Polyester,1.13,never,after 50 ms idle,64.5,3.19
-pforeach|1.13|never|back to back,pforeach,1.13,never,back to back,52.9,3.89
-pforeach|1.13|never|after 2 ms idle,pforeach,1.13,never,after 2 ms idle,52.5,3.92
-pforeach|1.13|never|after 50 ms idle,pforeach,1.13,never,after 50 ms idle,108.4,1.9
-ParkedWorkers|nightly|allowed|back to back,ParkedWorkers,nightly,allowed,back to back,219.9,0.924
-ParkedWorkers|nightly|allowed|after 2 ms idle,ParkedWorkers,nightly,allowed,after 2 ms idle,220.3,0.923
-ParkedWorkers|nightly|allowed|after 50 ms idle,ParkedWorkers,nightly,allowed,after 50 ms idle,351.4,0.579
-parallel_for (vc branch)|nightly|allowed|back to back,parallel_for (vc branch),nightly,allowed,back to back,221.4,0.919
-parallel_for (vc branch)|nightly|allowed|after 2 ms idle,parallel_for (vc branch),nightly,allowed,after 2 ms idle,222.0,0.917
-parallel_for (vc branch)|nightly|allowed|after 50 ms idle,parallel_for (vc branch),nightly,allowed,after 50 ms idle,303.2,0.671
-pforeach|nightly|allowed|back to back,pforeach,nightly,allowed,back to back,54.1,3.76
-pforeach|nightly|allowed|after 2 ms idle,pforeach,nightly,allowed,after 2 ms idle,72.8,2.8
-pforeach|nightly|allowed|after 50 ms idle,pforeach,nightly,allowed,after 50 ms idle,211.0,0.963
-ParkedWorkers|nightly|never|back to back,ParkedWorkers,nightly,never,back to back,16.8,12.1
-ParkedWorkers|nightly|never|after 2 ms idle,ParkedWorkers,nightly,never,after 2 ms idle,29.3,6.96
-ParkedWorkers|nightly|never|after 50 ms idle,ParkedWorkers,nightly,never,after 50 ms idle,75.5,2.7
-parallel_for (vc branch)|nightly|never|back to back,parallel_for (vc branch),nightly,never,back to back,12.7,16.1
-parallel_for (vc branch)|nightly|never|after 2 ms idle,parallel_for (vc branch),nightly,never,after 2 ms idle,21.8,9.34
-parallel_for (vc branch)|nightly|never|after 50 ms idle,parallel_for (vc branch),nightly,never,after 50 ms idle,45.7,4.46
-pforeach|nightly|never|back to back,pforeach,nightly,never,back to back,53.4,3.82
-pforeach|nightly|never|after 2 ms idle,pforeach,nightly,never,after 2 ms idle,52.4,3.89
-pforeach|nightly|never|after 50 ms idle,pforeach,nightly,never,after 50 ms idle,110.6,1.84
+oneTBB|C++|allowed|back to back,oneTBB,C++,allowed,back to back,88.9,2.5
+oneTBB|C++|allowed|after 2 ms idle,oneTBB,C++,allowed,after 2 ms idle,114.5,1.94
+oneTBB|C++|allowed|after 50 ms idle,oneTBB,C++,allowed,after 50 ms idle,216.9,1.02
+oneTBB affinity|C++|allowed|back to back,oneTBB affinity,C++,allowed,back to back,54.0,4.12
+oneTBB affinity|C++|allowed|after 2 ms idle,oneTBB affinity,C++,allowed,after 2 ms idle,101.5,2.19
+oneTBB affinity|C++|allowed|after 50 ms idle,oneTBB affinity,C++,allowed,after 50 ms idle,237.4,0.936
+Polyester|1.13|allowed|back to back,Polyester,1.13,allowed,back to back,18.2,11.3
+Polyester|1.13|allowed|after 2 ms idle,Polyester,1.13,allowed,after 2 ms idle,18.0,11.4
+Polyester|1.13|allowed|after 50 ms idle,Polyester,1.13,allowed,after 50 ms idle,146.7,1.4
+pforeach|1.13|allowed|back to back,pforeach,1.13,allowed,back to back,53.9,3.81
+pforeach|1.13|allowed|after 2 ms idle,pforeach,1.13,allowed,after 2 ms idle,71.6,2.87
+pforeach|1.13|allowed|after 50 ms idle,pforeach,1.13,allowed,after 50 ms idle,210.7,0.976
+Polyester|1.13|never|back to back,Polyester,1.13,never,back to back,18.2,11.3
+Polyester|1.13|never|after 2 ms idle,Polyester,1.13,never,after 2 ms idle,18.7,11.1
+Polyester|1.13|never|after 50 ms idle,Polyester,1.13,never,after 50 ms idle,61.8,3.34
+pforeach|1.13|never|back to back,pforeach,1.13,never,back to back,53.0,3.9
+pforeach|1.13|never|after 2 ms idle,pforeach,1.13,never,after 2 ms idle,50.0,4.13
+pforeach|1.13|never|after 50 ms idle,pforeach,1.13,never,after 50 ms idle,96.7,2.14
+ParkedWorkers|nightly|allowed|back to back,ParkedWorkers,nightly,allowed,back to back,219.7,0.933
+ParkedWorkers|nightly|allowed|after 2 ms idle,ParkedWorkers,nightly,allowed,after 2 ms idle,220.1,0.929
+ParkedWorkers|nightly|allowed|after 50 ms idle,ParkedWorkers,nightly,allowed,after 50 ms idle,313.8,0.652
+parallel_for (vc branch)|nightly|allowed|back to back,parallel_for (vc branch),nightly,allowed,back to back,12.2,16.8
+parallel_for (vc branch)|nightly|allowed|after 2 ms idle,parallel_for (vc branch),nightly,allowed,after 2 ms idle,70.5,2.91
+parallel_for (vc branch)|nightly|allowed|after 50 ms idle,parallel_for (vc branch),nightly,allowed,after 50 ms idle,239.1,0.855
+pforeach|nightly|allowed|back to back,pforeach,nightly,allowed,back to back,54.3,3.77
+pforeach|nightly|allowed|after 2 ms idle,pforeach,nightly,allowed,after 2 ms idle,71.5,2.86
+pforeach|nightly|allowed|after 50 ms idle,pforeach,nightly,allowed,after 50 ms idle,196.6,1.04
+ParkedWorkers|nightly|never|back to back,ParkedWorkers,nightly,never,back to back,220.2,0.929
+ParkedWorkers|nightly|never|after 2 ms idle,ParkedWorkers,nightly,never,after 2 ms idle,219.9,0.931
+ParkedWorkers|nightly|never|after 50 ms idle,ParkedWorkers,nightly,never,after 50 ms idle,331.2,0.617
+parallel_for (vc branch)|nightly|never|back to back,parallel_for (vc branch),nightly,never,back to back,220.9,0.927
+parallel_for (vc branch)|nightly|never|after 2 ms idle,parallel_for (vc branch),nightly,never,after 2 ms idle,221.4,0.925
+parallel_for (vc branch)|nightly|never|after 50 ms idle,parallel_for (vc branch),nightly,never,after 50 ms idle,298.1,0.687
+pforeach|nightly|never|back to back,pforeach,nightly,never,back to back,54.7,3.74
+pforeach|nightly|never|after 2 ms idle,pforeach,nightly,never,after 2 ms idle,52.0,3.93
+pforeach|nightly|never|after 50 ms idle,pforeach,nightly,never,after 50 ms idle,108.0,1.9

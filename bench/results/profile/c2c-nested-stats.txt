@@ -1,0 +1,66 @@
+WARNING: failed to find node
+addr2line /home/gbaraldi/.debug/.build-id/1e/d55600d793bfc245b701123edc282025e32ae2/elf: could not read sentinel record
+addr2line /home/gbaraldi/.julia/juliaup/julia-1.13.0+0.x64.linux.gnu/lib/julia/sys.so: could not read first record
+addr2line /home/gbaraldi/.julia/juliaup/julia-1.13.0+0.x64.linux.gnu/lib/julia/sys.so: unexpected record instead of sentineladdr2line /home/gbaraldi/.julia/juliaup/julia-1.13.0+0.x64.linux.gnu/lib/julia/sys.so: unexpected record instead of sentineladdr2line /home/gbaraldi/.julia/juliaup/julia-1.13.0+0.x64.linux.gnu/lib/julia/sys.so: unexpected record instead of sentineladdr2line /home/gbaraldi/.julia/juliaup/julia-1.13.0+0.x64.linux.gnu/lib/julia/sys.so: unexpected record instead of sentineladdr2line /home/gbaraldi/.julia/juliaup/julia-1.13.0+0.x64.linux.gnu/lib/julia/sys.so: unexpected record instead of sentineladdr2line /home/gbaraldi/.julia/juliaup/julia-1.13.0+0.x64.linux.gnu/lib/julia/sys.so: could not read sentinel record
+addr2line /home/gbaraldi/.julia/juliaup/julia-1.13.0+0.x64.linux.gnu/lib/julia/sys.so: unexpected record instead of sentinel=================================================
+            Trace Event Information              
+=================================================
+  Total records                     :     402985
+  Locked Load/Store Operations      :        894
+  Load Operations                   :      85492
+  Loads - uncacheable               :          0
+  Loads - IO                        :          0
+  Loads - Miss                      :          0
+  Loads - no mapping                :       7230
+  Load Fill Buffer Hit              :          0
+  Load L1D hit                      :      74759
+  Load L2D hit                      :       1350
+  Load LLC hit                      :        338
+  Load Local HITM                   :        136
+  Load Remote HITM                  :       1119
+  Load Remote HIT                   :          0
+  Load Local DRAM                   :        187
+  Load Remote DRAM                  :        144
+  Load MESI State Exclusive         :        331
+  Load MESI State Shared            :          0
+  Load LLC Misses                   :       1450
+  Load access blocked by data       :          0
+  Load access blocked by address    :          0
+  Load HIT Local Peer               :          0
+  Load HIT Remote Peer              :          0
+  LLC Misses to Local DRAM          :       12.9%
+  LLC Misses to Remote DRAM         :        9.9%
+  LLC Misses to Remote cache (HIT)  :        0.0%
+  LLC Misses to Remote cache (HITM) :       77.2%
+  Store Operations                  :      39165
+  Store - uncacheable               :          0
+  Store - no mapping                :        372
+  Store L1D Hit                     :      35970
+  Store L1D Miss                    :          0
+  Store No available memory level   :        837
+  No Page Map Rejects               :       4898
+  Unable to parse data source       :     278328
+
+=================================================
+    Global Shared Cache Line Event Information   
+=================================================
+  Total Shared Cache Lines          :        464
+  Load HITs on shared lines         :      16420
+  Fill Buffer Hits on shared lines  :          0
+  L1D hits on shared lines          :      14294
+  L2D hits on shared lines          :        549
+  LLC hits on shared lines          :        203
+  Load hits on peer cache or nodes  :          0
+  Locked Access on shared lines     :        629
+  Blocked Access on shared lines    :          0
+  Store HITs on shared lines        :       2302
+  Store L1D hits on shared lines    :       1414
+  Store No available memory level   :        270
+  Total Merged records              :       3557
+
+=================================================
+                 c2c details                     
+=================================================
+  Events                            : ibs_op//
+  Cachelines sort on                : Total HITMs
+  Cacheline data grouping           : offset,iaddr

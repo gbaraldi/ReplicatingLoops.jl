@@ -337,7 +337,15 @@ end
         catch err
             err
         end
-        @test e isa CompositeException
+        @test e isa CompositeException && e.exceptions[1].ex == ErrorException("x")
+        # The predicted work of a huge loop must not overflow the helper count.
+        e = try
+            pforeach(i -> i == 1 ? sleep(0.002) : error("second"), 1:10^18; ntasks = 1)
+            nothing
+        catch err
+            err
+        end
+        @test e isa CompositeException && e.exceptions[1].ex == ErrorException("second")
     end
 
     @testset "many small loops" begin

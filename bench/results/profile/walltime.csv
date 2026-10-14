@@ -1,0 +1,55 @@
+key,workload,where,percent,tasks,samples
+axpy1m|loop body,axpy1m,loop body,34.7,5111,7201
+axpy1m|spawn_wanted!,axpy1m,spawn_wanted!,19.7,5111,7201
+axpy1m|skip_empty,axpy1m,skip_empty,13.1,5111,7201
+axpy1m|finish!,axpy1m,finish!,7.6,5111,7201
+axpy1m|bclaim!,axpy1m,bclaim!,6.6,5111,7201
+axpy1m|work!,axpy1m,work!,4.0,5111,7201
+axpy1m|outside: ?,axpy1m,outside: ?,3.4,5111,7201
+axpy1m|Chunk,axpy1m,Chunk,3.2,5111,7201
+axpy1m|bnext,axpy1m,bnext,2.9,5111,7201
+axpy1m|maybe_raise!,axpy1m,maybe_raise!,1.1,5111,7201
+axpy1m|wait_done,axpy1m,wait_done,0.9,5111,7201
+axpy1m|split!,axpy1m,split!,0.7,5111,7201
+axpy1m|chunk_size,axpy1m,chunk_size,0.5,5111,7201
+axpy1m_cold|outside: systemsleep,axpy1m_cold,outside: systemsleep,61.7,245,1071
+axpy1m_cold|loop body,axpy1m_cold,loop body,12.3,245,1071
+axpy1m_cold|spawn_wanted!,axpy1m_cold,spawn_wanted!,8.3,245,1071
+axpy1m_cold|bclaim!,axpy1m_cold,bclaim!,4.9,245,1071
+axpy1m_cold|skip_empty,axpy1m_cold,skip_empty,4.1,245,1071
+axpy1m_cold|work!,axpy1m_cold,work!,2.8,245,1071
+axpy1m_cold|bnext,axpy1m_cold,bnext,2.4,245,1071
+axpy1m_cold|finish!,axpy1m_cold,finish!,1.8,245,1071
+axpy1m_cold|claim_block!,axpy1m_cold,claim_block!,0.4,245,1071
+tri300|loop body,tri300,loop body,28.0,3179,4332
+tri300|spawn_wanted!,tri300,spawn_wanted!,19.8,3179,4332
+tri300|skip_empty,tri300,skip_empty,16.5,3179,4332
+tri300|bclaim!,tri300,bclaim!,15.1,3179,4332
+tri300|bnext,tri300,bnext,6.3,3179,4332
+tri300|finish!,tri300,finish!,6.3,3179,4332
+tri300|Chunk,tri300,Chunk,1.7,3179,4332
+tri300|work!,tri300,work!,1.4,3179,4332
+tri300|wait_done,tri300,wait_done,1.1,3179,4332
+tri300|maybe_raise!,tri300,maybe_raise!,1.0,3179,4332
+tri300|outside: ?,tri300,outside: ?,0.9,3179,4332
+tri300|chunk_size,tri300,chunk_size,0.4,3179,4332
+tri300|split!,tri300,split!,0.4,3179,4332
+spin32|loop body,spin32,loop body,90.9,8734,10453
+spin32|spawn_wanted!,spin32,spawn_wanted!,2.7,8734,10453
+spin32|wait_done,spin32,wait_done,1.8,8734,10453
+spin32|skip_empty,spin32,skip_empty,1.3,8734,10453
+spin32|finish!,spin32,finish!,1.1,8734,10453
+spin32|outside: ?,spin32,outside: ?,1.0,8734,10453
+spin32|Chunk,spin32,Chunk,0.5,8734,10453
+small|work!,small,work!,52.4,89,1291
+small|spawn_wanted!,small,spawn_wanted!,16.1,89,1291
+small|outside: time,small,outside: time,10.1,89,1291
+small|loop body,small,loop body,5.7,89,1291
+small|Loop,small,Loop,5.3,89,1291
+small|Chunk,small,Chunk,2.2,89,1291
+small|#pforeach#2,small,#pforeach#2,2.1,89,1291
+small|skip_empty,small,skip_empty,1.5,89,1291
+small|bnext,small,bnext,1.2,89,1291
+small|bclaim!,small,bclaim!,1.2,89,1291
+small|finish!,small,finish!,0.6,89,1291
+small|default_ntasks,small,default_ntasks,0.5,89,1291

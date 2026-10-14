@@ -1,0 +1,214 @@
+--- a/src/ReplicatingLoops.jl
++++ b/src/ReplicatingLoops.jl
+@@ -14,6 +14,23 @@
+ const SPIN_NS = 20_000       # how long the caller spins before blocking
+ const PENDING = 8           # helpers started but not running yet, plus 2 per running one
+ 
++const TR = Ref(false)
++# per task: helper id, thread, entered, first chunk start, last chunk end, iterations, chunks, ns in body
++const TASKS = [NTuple{8,Int}[] for _ in 1:256]
++const EVENTS = [Tuple{Int,Int,Int}[] for _ in 1:256]   # (time, kind, value): 1 split nb, 2 spawn/job given (helper id)
++const K_TREE = Ref(true)
++const K_STEALHALF = Ref(true)
++const K_SPIN = Ref(20_000)
++const K_PLAIN = Ref(true)
++const K_SHARE = Ref(true)
++const K_GROW = Ref(true)
++const K_GROWF = Ref(2.0)
++const K_INSTANT = Ref(false)
++const K_BCAST = Ref(false)
++mutable struct Current
++    @atomic loop::Any
++end
++const CURRENT = Current(nothing)
+ const CLOSED = typemax(Int) >> 1  # `next` value once nothing more is handed out
+ 
+ # Once a loop is worth sharing it is cut into blocks, kept in one flat array so
+@@ -133,6 +150,7 @@
+     r.nb == 0 && !split!(r, left * est) && return now
+     # New helpers size their first chunk from this.
+     @atomic :monotonic r.ns_per_iter = est
++    K_BCAST[] && (@atomic :release CURRENT.loop = r)
+     raise_target!(r, want)
+     return now
+ end
+@@ -152,6 +170,7 @@
+ # wake-up is the optimal shape for this (Karp, Sahay, Santos and Schauser,
+ # "Optimal broadcast and summation in the LogP model", SPAA 1993).
+ function spawn_wanted!(r::Loop)
++    K_BCAST[] && return
+     while true
+         h = @atomic :monotonic r.helpers
+         h < (@atomic :monotonic r.target) || return
+@@ -159,6 +178,8 @@
+         # only find the loop done, so stop there (as oneTBB's slack does).
+         h - (@atomic :monotonic r.running) < PENDING + 2 * (@atomic :monotonic r.running) || return
+         (@atomicreplace r.helpers h => h + 1).success || continue
++        TR[] && push!(EVENTS[threadid()], (Int(time_ns()), 2, h + 1))
++        K_INSTANT[] && give_job!(r, h + 1) && continue
+         @spawn :default helper!(r, h + 1)
+     end
+ end
+@@ -168,8 +189,8 @@
+ # together. Never go below MEASURE_NS worth of iterations.
+ function chunk_size(r::Loop, est::Float64, k::Int, left::Int)
+     h = min(@atomic(:monotonic, r.helpers), r.maxhelpers)
+-    want = min(CHUNK_NS / est, 2.0 * k)
+-    h > 0 && (want = min(want, left / (2 * (h + 1))))
++    want = K_GROW[] ? min(CHUNK_NS / est, K_GROWF[] * k) : CHUNK_NS / est
++    K_SHARE[] && h > 0 && (want = min(want, left / (2 * (h + 1))))
+     return floor(Int, clamp(max(want, MEASURE_NS / est), 1, left))
+ end
+ 
+@@ -188,6 +209,7 @@
+     k = est > 0 ? typemax(Int) >> 2 : 1   # capped by chunk_size before use
+     t0 = t = last = time_ns()
+     c = Chunk(0, 0)
++    tfirst = 0; tlast = 0; nch = 0; busy = 0
+     home = 0   # the block this task starts on; `j` counts the blocks it has finished
+     own = false
+     j = 0
+@@ -211,7 +233,7 @@
+                     left = blocks_left(r, home, j)
+                     left == 0 && continue   # emptied meanwhile; look again
+                 end
+-                if !caller && claimed == 0 && left * est >= MIN_WORK_NS
++                if K_TREE[] && !caller && claimed == 0 && left * est >= MIN_WORK_NS
+                     # Each new helper asks for two more while work is left, so
+                     # the number of helpers can double like a tree even when
+                     # early iterations made the work look small.
+@@ -229,16 +251,26 @@
+                 # Until it cuts the loop into blocks, the caller is the only
+                 # task, so a plain store will do here; a locked add would wait
+                 # for this chunk's stores to drain.
+-                lo = (@atomic :monotonic r.next) + 1
+-                hi = min(lo + k - 1, n)
+-                lo > n && break
+-                @atomic :monotonic r.next = hi
++                if K_PLAIN[]
++                    lo = (@atomic :monotonic r.next) + 1
++                    hi = min(lo + k - 1, n)
++                    lo > n && break
++                    @atomic :monotonic r.next = hi
++                else
++                    hi = @atomic :monotonic r.next += k
++                    lo = hi - k + 1
++                    lo > n && break
++                    hi = min(hi, n)
++                end
+             end
+             claimed += hi - lo + 1
+             c.lo = lo
+             c.hi = hi
++            tb = time_ns()
++            tfirst == 0 && (tfirst = Int(tb))
+             r.body(c)
+             now = time_ns()
++            nch += 1; busy += Int(now - tb); tlast = Int(now)
+             if caller && claimed == hi - lo + 1
+                 @atomic :monotonic r.first_done = true
+                 r.site != 0 && remember!(r.site, now - t >= WATCH_NS)
+@@ -254,9 +286,77 @@
+     catch e
+         claimed += cancel!(r, e, catch_backtrace())
+     end
++    TR[] && push!(TASKS[threadid()], (helper, threadid(), Int(t0), tfirst, tlast, claimed, nch, busy))
+     return claimed
+ end
+ 
++mutable struct Worker
++    @atomic job::Any
++    const pad::NTuple{15,Int}
++end
++const WORKERS = Worker[]
++const NEXTW = Threads.Atomic{Int}(0)
++function give_job!(r::Loop, i::Int)
++    nw = length(WORKERS)
++    nw == 0 && return false
++    s = NEXTW[]
++    for k in 1:nw
++        w = WORKERS[mod1(s + k, nw)]
++        if (@atomic :monotonic w.job) === nothing && (@atomicreplace w.job nothing => (r, i)).success
++            NEXTW[] = s + k
++            return true
++        end
++    end
++    return false
++end
++function bcast_loop(stop::Threads.Atomic{Bool})
++    seen = nothing
++    while !stop[]
++        r = @atomic :acquire CURRENT.loop
++        if r === nothing || r === seen
++            ccall(:jl_cpu_pause, Cvoid, ())
++            GC.safepoint()
++            continue
++        end
++        seen = r
++        r = r::Loop
++        h = @atomic r.helpers += 1
++        h <= r.maxhelpers || continue
++        Base.invokelatest(helper!, r, h)
++    end
++end
++function start_bcast!(stop)
++    for tid in Threads.threadpooltids(:default)
++        t = Task(() -> bcast_loop(stop))
++        t.sticky = true
++        ccall(:jl_set_task_tid, Cint, (Any, Cint), t, tid - 1)
++        schedule(t)
++    end
++end
++function worker_loop(w::Worker, stop::Threads.Atomic{Bool})
++    while !stop[]
++        job = @atomic :acquire w.job
++        if job === nothing
++            ccall(:jl_cpu_pause, Cvoid, ())
++            GC.safepoint()
++            continue
++        end
++        Base.invokelatest(helper!, job[1]::Loop, job[2]::Int)
++        @atomic :release w.job = nothing
++    end
++end
++# Start one spinning worker per default thread (sticky), for the counterfactual.
++function start_workers!(stop)
++    for tid in Threads.threadpooltids(:default)
++        w = Worker(nothing, ntuple(_ -> 0, 15))
++        push!(WORKERS, w)
++        t = Task(() -> worker_loop(w, stop))
++        t.sticky = true
++        ccall(:jl_set_task_tid, Cint, (Any, Cint), t, tid - 1)
++        schedule(t)
++    end
++end
++
+ function helper!(r::Loop, i::Int)
+     @atomic :monotonic r.running += 1
+     claimed = work!(r, false, i)
+@@ -331,6 +431,7 @@
+     end
+     r.blocks = d
+     r.nb = nb
++    TR[] && push!(EVENTS[threadid()], (Int(time_ns()), 1, nb))
+     @atomic r.next = CLOSED
+     return true
+ end
+@@ -385,7 +486,7 @@
+         bh = bhi(d, i)
+         rest = bh - bnext(d, i)
+         if rest > 0
+-            kk = j == 0 && own ? k : min(k, max(cld(rest, 2), kmin))
++            kk = j == 0 && own ? k : K_STEALHALF[] ? min(k, max(cld(rest, 2), kmin)) : k
+             hi = bclaim!(d, i, kk)
+             lo = hi - kk + 1
+             lo <= bh && return lo, min(hi, bh), j
+@@ -417,7 +518,7 @@
+ # they usually finish soon after the caller runs out of work, then block.
+ function wait_done(r::Loop)
+     t0 = time_ns()
+-    while time_ns() - t0 < SPIN_NS
++    while time_ns() - t0 < K_SPIN[]
+         (@atomic r.left) == 0 && return
+         ccall(:jl_cpu_pause, Cvoid, ())
+         GC.safepoint()

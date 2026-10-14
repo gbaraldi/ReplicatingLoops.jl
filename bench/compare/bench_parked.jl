@@ -23,7 +23,7 @@ function bench_ns(f::F; reps = 7) where {F}
     end
     inner = 1
     t = @elapsed f()
-    while t * inner < 2e-3
+    while t < 2e-3   # t is the time of the whole batch of `inner` calls
         inner *= 2
         t = @elapsed (for _ in 1:inner; f(); end)
     end
