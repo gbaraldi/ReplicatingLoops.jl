@@ -3,7 +3,7 @@
 # serial loop of the same run. Later -pfor files replace pforeach rows.
 #   julia bench/compare/compare_csv.jl > bench/results/compare/compare.csv
 const DIR = joinpath(@__DIR__, "..", "results", "compare")
-const LABELS = Dict("pfor" => "pforeach", "pfor_aff" => "pforeach, affinity",
+const LABELS = Dict("pfor" => "pforeach",
                     "parked" => "ParkedWorkers.jl", "branch" => "Threads.parallel_for (vc branch)",
                     "threads" => "@threads", "omt" => "OhMyThreads tforeach")
 println("key,workload,n,impl,label,threads,ns,serial_ns,speedup")

@@ -14,16 +14,11 @@ axpy-10000-parked-8,axpy,10000,parked,"ParkedWorkers.jl",8,3281,1541,0.47
 axpy-100000-parked-8,axpy,100000,parked,"ParkedWorkers.jl",8,5953,18791,3.16
 axpy-1000000-parked-8,axpy,1000000,parked,"ParkedWorkers.jl",8,33032,202506,6.13
 axpy-10000000-parked-8,axpy,10000000,parked,"ParkedWorkers.jl",8,274548,3846929,14.0
-axpy-1000-pfor-8,axpy,1000,pfor,"pforeach",8,536,91,0.17
-axpy-10000-pfor-8,axpy,10000,pfor,"pforeach",8,2433,1561,0.642
-axpy-100000-pfor-8,axpy,100000,pfor,"pforeach",8,22459,18888,0.841
-axpy-1000000-pfor-8,axpy,1000000,pfor,"pforeach",8,102904,202785,1.97
-axpy-10000000-pfor-8,axpy,10000000,pfor,"pforeach",8,1655208,3907810,2.36
-axpy-1000-pfor_aff-8,axpy,1000,pfor_aff,"pforeach, affinity",8,528,91,0.172
-axpy-10000-pfor_aff-8,axpy,10000,pfor_aff,"pforeach, affinity",8,2454,1561,0.636
-axpy-100000-pfor_aff-8,axpy,100000,pfor_aff,"pforeach, affinity",8,25291,18888,0.747
-axpy-1000000-pfor_aff-8,axpy,1000000,pfor_aff,"pforeach, affinity",8,49505,202785,4.1
-axpy-10000000-pfor_aff-8,axpy,10000000,pfor_aff,"pforeach, affinity",8,283674,3907810,13.8
+axpy-1000-pfor-8,axpy,1000,pfor,"pforeach",8,552,91,0.165
+axpy-10000-pfor-8,axpy,10000,pfor,"pforeach",8,2614,1567,0.599
+axpy-100000-pfor-8,axpy,100000,pfor,"pforeach",8,22716,18936,0.834
+axpy-1000000-pfor-8,axpy,1000000,pfor,"pforeach",8,41216,202745,4.92
+axpy-10000000-pfor-8,axpy,10000000,pfor,"pforeach",8,316626,3950785,12.5
 axpy-1000-threads-8,axpy,1000,threads,"@threads",8,21582,91,0.00422
 axpy-10000-threads-8,axpy,10000,threads,"@threads",8,22269,1541,0.0692
 axpy-100000-threads-8,axpy,100000,threads,"@threads",8,27455,18791,0.684
@@ -35,10 +30,8 @@ axpy_cold-10000-omt-8,axpy_cold,10000,omt,"OhMyThreads tforeach",8,29371,1710,0.
 axpy_cold-1000000-omt-8,axpy_cold,1000000,omt,"OhMyThreads tforeach",8,106043,204686,1.93
 axpy_cold-10000-parked-8,axpy_cold,10000,parked,"ParkedWorkers.jl",8,20650,1710,0.0828
 axpy_cold-1000000-parked-8,axpy_cold,1000000,parked,"ParkedWorkers.jl",8,64912,204686,3.15
-axpy_cold-10000-pfor-8,axpy_cold,10000,pfor,"pforeach",8,2760,1700,0.616
-axpy_cold-1000000-pfor-8,axpy_cold,1000000,pfor,"pforeach",8,119103,204995,1.72
-axpy_cold-10000-pfor_aff-8,axpy_cold,10000,pfor_aff,"pforeach, affinity",8,2730,1700,0.623
-axpy_cold-1000000-pfor_aff-8,axpy_cold,1000000,pfor_aff,"pforeach, affinity",8,65911,204995,3.11
+axpy_cold-10000-pfor-8,axpy_cold,10000,pfor,"pforeach",8,2960,1690,0.571
+axpy_cold-1000000-pfor-8,axpy_cold,1000000,pfor,"pforeach",8,61722,206055,3.34
 axpy_cold-10000-threads-8,axpy_cold,10000,threads,"@threads",8,28241,1710,0.0606
 axpy_cold-1000000-threads-8,axpy_cold,1000000,threads,"@threads",8,79822,204686,2.56
 tri-30-branch-8,tri,30,branch,"Threads.parallel_for (vc branch)",8,3387,2482,0.733
@@ -50,12 +43,9 @@ tri-3000-omt-8,tri,3000,omt,"OhMyThreads tforeach",8,8504671,29181457,3.43
 tri-30-parked-8,tri,30,parked,"ParkedWorkers.jl",8,4072,2482,0.61
 tri-300-parked-8,tri,300,parked,"ParkedWorkers.jl",8,70002,287006,4.1
 tri-3000-parked-8,tri,3000,parked,"ParkedWorkers.jl",8,6856474,29181457,4.26
-tri-30-pfor-8,tri,30,pfor,"pforeach",8,2841,2481,0.873
-tri-300-pfor-8,tri,300,pfor,"pforeach",8,58084,287204,4.94
-tri-3000-pfor-8,tri,3000,pfor,"pforeach",8,3335528,29198250,8.75
-tri-30-pfor_aff-8,tri,30,pfor_aff,"pforeach, affinity",8,2856,2481,0.869
-tri-300-pfor_aff-8,tri,300,pfor_aff,"pforeach, affinity",8,53955,287204,5.32
-tri-3000-pfor_aff-8,tri,3000,pfor_aff,"pforeach, affinity",8,3307928,29198250,8.83
+tri-30-pfor-8,tri,30,pfor,"pforeach",8,2852,2482,0.87
+tri-300-pfor-8,tri,300,pfor,"pforeach",8,61278,287450,4.69
+tri-3000-pfor-8,tri,3000,pfor,"pforeach",8,3299680,29185223,8.84
 tri-30-threads-8,tri,30,threads,"@threads",8,19941,2482,0.124
 tri-300-threads-8,tri,300,threads,"@threads",8,88722,287006,3.23
 tri-3000-threads-8,tri,3000,threads,"@threads",8,6920916,29181457,4.22
@@ -74,16 +64,11 @@ axpy-10000-parked-32,axpy,10000,parked,"ParkedWorkers.jl",32,12655,1540,0.122
 axpy-100000-parked-32,axpy,100000,parked,"ParkedWorkers.jl",32,11865,18782,1.58
 axpy-1000000-parked-32,axpy,1000000,parked,"ParkedWorkers.jl",32,15889,202651,12.8
 axpy-10000000-parked-32,axpy,10000000,parked,"ParkedWorkers.jl",32,86453,3908900,45.2
-axpy-1000-pfor-32,axpy,1000,pfor,"pforeach",32,553,91,0.165
-axpy-10000-pfor-32,axpy,10000,pfor,"pforeach",32,2429,1540,0.634
-axpy-100000-pfor-32,axpy,100000,pfor,"pforeach",32,22825,18722,0.82
-axpy-1000000-pfor-32,axpy,1000000,pfor,"pforeach",32,147816,203700,1.38
-axpy-10000000-pfor-32,axpy,10000000,pfor,"pforeach",32,1262390,3938252,3.12
-axpy-1000-pfor_aff-32,axpy,1000,pfor_aff,"pforeach, affinity",32,571,91,0.159
-axpy-10000-pfor_aff-32,axpy,10000,pfor_aff,"pforeach, affinity",32,2452,1540,0.628
-axpy-100000-pfor_aff-32,axpy,100000,pfor_aff,"pforeach, affinity",32,49895,18722,0.375
-axpy-1000000-pfor_aff-32,axpy,1000000,pfor_aff,"pforeach, affinity",32,49952,203700,4.08
-axpy-10000000-pfor_aff-32,axpy,10000000,pfor_aff,"pforeach, affinity",32,119703,3938252,32.9
+axpy-1000-pfor-32,axpy,1000,pfor,"pforeach",32,535,91,0.17
+axpy-10000-pfor-32,axpy,10000,pfor,"pforeach",32,2451,1540,0.628
+axpy-100000-pfor-32,axpy,100000,pfor,"pforeach",32,23006,18872,0.82
+axpy-1000000-pfor-32,axpy,1000000,pfor,"pforeach",32,49167,205300,4.18
+axpy-10000000-pfor-32,axpy,10000000,pfor,"pforeach",32,114523,3958432,34.6
 axpy-1000-threads-32,axpy,1000,threads,"@threads",32,131191,92,0.000701
 axpy-10000-threads-32,axpy,10000,threads,"@threads",32,133059,1540,0.0116
 axpy-100000-threads-32,axpy,100000,threads,"@threads",32,147022,18782,0.128
@@ -95,10 +80,8 @@ axpy_cold-10000-omt-32,axpy_cold,10000,omt,"OhMyThreads tforeach",32,99862,1690,
 axpy_cold-1000000-omt-32,axpy_cold,1000000,omt,"OhMyThreads tforeach",32,132904,205506,1.55
 axpy_cold-10000-parked-32,axpy_cold,10000,parked,"ParkedWorkers.jl",32,53841,1690,0.0314
 axpy_cold-1000000-parked-32,axpy_cold,1000000,parked,"ParkedWorkers.jl",32,74562,205506,2.76
-axpy_cold-10000-pfor-32,axpy_cold,10000,pfor,"pforeach",32,2950,1680,0.569
-axpy_cold-1000000-pfor-32,axpy_cold,1000000,pfor,"pforeach",32,150794,205015,1.36
-axpy_cold-10000-pfor_aff-32,axpy_cold,10000,pfor_aff,"pforeach, affinity",32,2880,1680,0.583
-axpy_cold-1000000-pfor_aff-32,axpy_cold,1000000,pfor_aff,"pforeach, affinity",32,72181,205015,2.84
+axpy_cold-10000-pfor-32,axpy_cold,10000,pfor,"pforeach",32,2850,1690,0.593
+axpy_cold-1000000-pfor-32,axpy_cold,1000000,pfor,"pforeach",32,67623,205450,3.04
 axpy_cold-10000-threads-32,axpy_cold,10000,threads,"@threads",32,105693,1690,0.016
 axpy_cold-1000000-threads-32,axpy_cold,1000000,threads,"@threads",32,116263,205506,1.77
 tri-30-branch-32,tri,30,branch,"Threads.parallel_for (vc branch)",32,4900,2481,0.506
@@ -110,12 +93,9 @@ tri-3000-omt-32,tri,3000,omt,"OhMyThreads tforeach",32,4073221,29191027,7.17
 tri-30-parked-32,tri,30,parked,"ParkedWorkers.jl",32,11890,2481,0.209
 tri-300-parked-32,tri,300,parked,"ParkedWorkers.jl",32,20639,287230,13.9
 tri-3000-parked-32,tri,3000,parked,"ParkedWorkers.jl",32,1810041,29191027,16.1
-tri-30-pfor-32,tri,30,pfor,"pforeach",32,3213,2480,0.772
-tri-300-pfor-32,tri,300,pfor,"pforeach",32,58133,286919,4.94
-tri-3000-pfor-32,tri,3000,pfor,"pforeach",32,949167,29185913,30.7
-tri-30-pfor_aff-32,tri,30,pfor_aff,"pforeach, affinity",32,3254,2480,0.762
-tri-300-pfor_aff-32,tri,300,pfor_aff,"pforeach, affinity",32,54611,286919,5.25
-tri-3000-pfor_aff-32,tri,3000,pfor_aff,"pforeach, affinity",32,941387,29185913,31.0
+tri-30-pfor-32,tri,30,pfor,"pforeach",32,2860,2480,0.867
+tri-300-pfor-32,tri,300,pfor,"pforeach",32,59537,287372,4.83
+tri-3000-pfor-32,tri,3000,pfor,"pforeach",32,940900,29182011,31.0
 tri-30-threads-32,tri,30,threads,"@threads",32,142944,2481,0.0174
 tri-300-threads-32,tri,300,threads,"@threads",32,164020,287230,1.75
 tri-3000-threads-32,tri,3000,threads,"@threads",32,2611704,29191027,11.2
@@ -134,16 +114,11 @@ axpy-10000-parked-63,axpy,10000,parked,"ParkedWorkers.jl",63,22768,1540,0.0676
 axpy-100000-parked-63,axpy,100000,parked,"ParkedWorkers.jl",63,25403,18861,0.742
 axpy-1000000-parked-63,axpy,1000000,parked,"ParkedWorkers.jl",63,56172,203991,3.63
 axpy-10000000-parked-63,axpy,10000000,parked,"ParkedWorkers.jl",63,448518,3952492,8.81
-axpy-1000-pfor-63,axpy,1000,pfor,"pforeach",63,529,91,0.172
-axpy-10000-pfor-63,axpy,10000,pfor,"pforeach",63,2475,1540,0.622
-axpy-100000-pfor-63,axpy,100000,pfor,"pforeach",63,22529,18825,0.836
-axpy-1000000-pfor-63,axpy,1000000,pfor,"pforeach",63,192572,202838,1.05
-axpy-10000000-pfor-63,axpy,10000000,pfor,"pforeach",63,1554216,3928443,2.53
-axpy-1000-pfor_aff-63,axpy,1000,pfor_aff,"pforeach, affinity",63,554,91,0.164
-axpy-10000-pfor_aff-63,axpy,10000,pfor_aff,"pforeach, affinity",63,2481,1540,0.621
-axpy-100000-pfor_aff-63,axpy,100000,pfor_aff,"pforeach, affinity",63,77916,18825,0.242
-axpy-1000000-pfor_aff-63,axpy,1000000,pfor_aff,"pforeach, affinity",63,77818,202838,2.61
-axpy-10000000-pfor_aff-63,axpy,10000000,pfor_aff,"pforeach, affinity",63,154439,3928443,25.4
+axpy-1000-pfor-63,axpy,1000,pfor,"pforeach",63,532,91,0.171
+axpy-10000-pfor-63,axpy,10000,pfor,"pforeach",63,2395,1540,0.643
+axpy-100000-pfor-63,axpy,100000,pfor,"pforeach",63,22514,18859,0.838
+axpy-1000000-pfor-63,axpy,1000000,pfor,"pforeach",63,92522,202602,2.19
+axpy-10000000-pfor-63,axpy,10000000,pfor,"pforeach",63,150027,3914069,26.1
 axpy-1000-threads-63,axpy,1000,threads,"@threads",63,565776,91,0.000161
 axpy-10000-threads-63,axpy,10000,threads,"@threads",63,391856,1540,0.00393
 axpy-100000-threads-63,axpy,100000,threads,"@threads",63,499954,18861,0.0377
@@ -155,10 +130,8 @@ axpy_cold-10000-omt-63,axpy_cold,10000,omt,"OhMyThreads tforeach",63,192506,1680
 axpy_cold-1000000-omt-63,axpy_cold,1000000,omt,"OhMyThreads tforeach",63,228396,204906,0.897
 axpy_cold-10000-parked-63,axpy_cold,10000,parked,"ParkedWorkers.jl",63,72002,1680,0.0233
 axpy_cold-1000000-parked-63,axpy_cold,1000000,parked,"ParkedWorkers.jl",63,102403,204906,2.0
-axpy_cold-10000-pfor-63,axpy_cold,10000,pfor,"pforeach",63,2810,1690,0.601
-axpy_cold-1000000-pfor-63,axpy_cold,1000000,pfor,"pforeach",63,188645,206144,1.09
-axpy_cold-10000-pfor_aff-63,axpy_cold,10000,pfor_aff,"pforeach, affinity",63,2811,1690,0.601
-axpy_cold-1000000-pfor_aff-63,axpy_cold,1000000,pfor_aff,"pforeach, affinity",63,93202,206144,2.21
+axpy_cold-10000-pfor-63,axpy_cold,10000,pfor,"pforeach",63,2850,1680,0.589
+axpy_cold-1000000-pfor-63,axpy_cold,1000000,pfor,"pforeach",63,92975,205220,2.21
 axpy_cold-10000-threads-63,axpy_cold,10000,threads,"@threads",63,232397,1680,0.00723
 axpy_cold-1000000-threads-63,axpy_cold,1000000,threads,"@threads",63,255208,204906,0.803
 tri-30-branch-63,tri,30,branch,"Threads.parallel_for (vc branch)",63,5166,2487,0.481
@@ -170,12 +143,9 @@ tri-3000-omt-63,tri,3000,omt,"OhMyThreads tforeach",63,1486812,29234748,19.7
 tri-30-parked-63,tri,30,parked,"ParkedWorkers.jl",63,13977,2487,0.178
 tri-300-parked-63,tri,300,parked,"ParkedWorkers.jl",63,35412,287238,8.11
 tri-3000-parked-63,tri,3000,parked,"ParkedWorkers.jl",63,1114842,29234748,26.2
-tri-30-pfor-63,tri,30,pfor,"pforeach",63,2843,2481,0.873
-tri-300-pfor-63,tri,300,pfor,"pforeach",63,77606,287030,3.7
-tri-3000-pfor-63,tri,3000,pfor,"pforeach",63,576394,29181695,50.6
-tri-30-pfor_aff-63,tri,30,pfor_aff,"pforeach, affinity",63,2841,2481,0.873
-tri-300-pfor_aff-63,tri,300,pfor_aff,"pforeach, affinity",63,77666,287030,3.7
-tri-3000-pfor_aff-63,tri,3000,pfor_aff,"pforeach, affinity",63,590918,29181695,49.4
+tri-30-pfor-63,tri,30,pfor,"pforeach",63,2859,2482,0.868
+tri-300-pfor-63,tri,300,pfor,"pforeach",63,72025,287349,3.99
+tri-3000-pfor-63,tri,3000,pfor,"pforeach",63,571612,29197634,51.1
 tri-30-threads-63,tri,30,threads,"@threads",63,526410,2487,0.00472
 tri-300-threads-63,tri,300,threads,"@threads",63,508007,287238,0.565
 tri-3000-threads-63,tri,3000,threads,"@threads",63,1624486,29234748,18.0

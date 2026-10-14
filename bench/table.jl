@@ -18,7 +18,6 @@ const COLUMNS = [
     ("tbb", "tbb") => "oneTBB",
     ("tbb", "tbb_affinity") => "oneTBB affinity",
     ("julia", "pfor") => "`pforeach`",
-    ("julia", "pfor_aff") => "`pforeach` affinity",
 ]
 
 rows = Dict{Tuple{String,Int},Dict{Tuple{String,String},Float64}}()

@@ -10,7 +10,6 @@ axpy_serial!(y, x, a) = (for i in eachindex(y); axpy_el!(y, x, a, i); end)
 axpy_parked!(y, x, a) = ParkedWorkers.pforeach(i -> axpy_el!(y, x, a, i), eachindex(y))
 axpy_branch!(y, x, a) = Base.Threads.parallel_for(i -> axpy_el!(y, x, a, i), eachindex(y))
 axpy_pfor!(y, x, a) = pforeach(i -> axpy_el!(y, x, a, i), eachindex(y))
-axpy_aff!(y, x, a) = pforeach(i -> axpy_el!(y, x, a, i), eachindex(y); affinity = true)
 function hot(f::F) where {F}
     t0 = time(); while time() - t0 < 0.5; f(); end
     best = Inf
@@ -34,7 +33,7 @@ function main(label)
     y = rand(1_000_000); x = rand(1_000_000)
     ser = hot(() -> axpy_serial!(y, x, 1.0001))
     for (name, f) in (("ParkedWorkers", axpy_parked!), ("parallel_for (vc branch)", axpy_branch!),
-                      ("pforeach", axpy_pfor!), ("pforeach affinity", axpy_aff!))
+                      ("pforeach", axpy_pfor!))
         g = () -> f(y, x, 1.0001)
         for (mode, t) in (("back to back", hot(g)), ("after 2 ms idle", gap(g, 0.002, 200)), ("after 50 ms idle", gap(g, 0.05, 40)))
             println("$name$label,$mode,$(round(t, digits = 1)),$(round(ser / t, sigdigits = 3))")

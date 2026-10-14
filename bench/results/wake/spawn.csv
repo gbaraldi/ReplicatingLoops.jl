@@ -1,7 +1,7 @@
 condition,spawner_us,to_cpu_us,julia_us,total_us
-threads spinning,2.0,,,3.4
-asleep 150 us (run 1),4.3,21.4,6.6,28.2
-asleep 150 us (run 2),4.2,47.9,15.2,63.4
-asleep 150 us (run 3),4.0,17.3,5.7,23.1
-asleep 500 us,4.2,49.4,16.2,66.0
-asleep 2000 us,4.1,52.0,18.4,71.0
+threads spinning,2.2,,,3.6
+asleep 150 us (run 1),4.1,47.7,14.9,63.0
+asleep 150 us (run 2),4.1,48.1,14.8,63.2
+asleep 150 us (run 3),4.1,47.8,14.8,63.1
+asleep 500 us,4.4,49.8,17.1,67.1
+asleep 2000 us,4.0,51.4,17.5,69.1

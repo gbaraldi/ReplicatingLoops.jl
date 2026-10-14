@@ -1,6 +1,6 @@
 # Regenerate the "## Performance" section of README.md from the result CSVs:
 #   bench/results/scaling/{scaling.csv,tables.md}, bench/results/wake/*.csv,
-#   bench/results/compare/compare.csv, bench/results/optimizations.csv
+#   bench/results/compare/compare.csv, bench/results/{fewlong,optimizations}.csv
 #   python3 bench/readme_perf.py
 import csv, os, re
 
@@ -14,6 +14,7 @@ futex = {r["impl"]: r for r in rd("wake/futex.csv")}
 gaps = {r["key"]: r for r in rd("wake/gaps.csv")}
 comp = {r["key"]: r for r in rd("compare/compare.csv")}
 opt = rd("optimizations.csv")
+few = {r["key"]: r for r in rd("fewlong.csv")}
 
 x = lambda k: f"{float(scal[k]['speedup']):.3g}×"
 cx = lambda k: f"{float(comp[k]['speedup']):.3g}×"
@@ -36,7 +37,7 @@ def trirow(impl, t):
 
 GAP_ROWS = [("Polyester", "1.13"), ("oneTBB affinity", "C++"), ("oneTBB", "C++"),
             ("ParkedWorkers", "nightly"), ("parallel_for (vc branch)", "nightly"),
-            ("pforeach affinity", "1.13"), ("pforeach", "1.13")]
+            ("pforeach", "1.13")]
 MODES = ["back to back", "after 2 ms idle", "after 50 ms idle"]
 
 
@@ -46,9 +47,21 @@ def gaprow(impl, lang):
     return f"| {impl} | {lang} | " + " | ".join(cells) + " | " + " | ".join(nev) + " |"
 
 
+FEW_T = sorted({int(r["threads"]) for r in few.values()})
+FEW_N = lambda t: sorted({int(r["n"]) for r in few.values() if int(r["threads"]) == t})
+
+
+def fewrow(t, n, c):
+    k = lambda i: few.get(f"{i}-{t}-{n}-{c}")
+    us = lambda r: f"{float(r['us']) / 1000:.2f} ms" if r else "–"
+    ideal = k("pfor")
+    return (f"| {t} | {n} × {c} µs | {float(ideal['ideal_us']) / 1000:.2f} ms | {us(k('pfor'))} | "
+            f"{us(k('threads'))} | {us(k('batch'))} |")
+
+
 CMP_W = [("axpy", 1000), ("axpy", 100000), ("axpy", 1000000), ("axpy", 10000000), ("axpy_cold", 1000000),
          ("tri", 30), ("tri", 300), ("tri", 3000)]
-CMP_I = ["pfor", "pfor_aff", "parked", "branch", "threads"]
+CMP_I = ["pfor", "parked", "branch", "threads"]
 
 
 def cmprow(w, n, t):
@@ -73,16 +86,15 @@ same run.
 - **Short loops stay near serial speed.** A 10,000-element `axpy` runs at
   {x('axpy-small-pfor-63')} of serial speed with 63 threads, where oneTBB gets
   {x('axpy-small-tbb-63')} and `@threads` {x('axpy-small-threads-63')}: the caller runs it alone.
-- **Large even loops over the same arrays scale furthest with affinity:**
-  {x('axpy-large-pfor_aff-32')} at 32 threads on 10M-element `axpy`, against {x('axpy-large-batch-32')} for
-  Polyester and {x('axpy-large-tbb_affinity-32')} for oneTBB's affinity partitioner. At 63 threads,
-  {x('axpy-large-pfor_aff-63')} against {x('axpy-large-tbb_affinity-63')} (Polyester drops to {x('axpy-large-batch-63')}: its 64 spinning
-  workers compete with other users' processes on this machine).
+- **Large even loops over the same arrays:** {x('axpy-large-pfor-32')} at 32 threads on 10M-element
+  `axpy`, against {x('axpy-large-batch-32')} for Polyester and {x('axpy-large-tbb_affinity-32')} for oneTBB's affinity
+  partitioner. At 63 threads, {x('axpy-large-pfor-63')} against {x('axpy-large-tbb_affinity-63')} and {x('axpy-large-batch-63')} (Polyester's 64
+  spinning workers compete with other users' processes on this machine).
 - **Large uneven loops scale like oneTBB:** {x('tri-large-pfor-63')} against {x('tri-large-tbb-63')} at 63
   threads on the 3,000-element triangle.
 - **Medium loops depend on how fast helpers start.** Back to back,
   Polyester's always-spinning workers reach {x('axpy-medium-batch-32')} on 1M-element `axpy` at
-  32 threads, against {x('axpy-medium-pfor_aff-32')} for `pforeach` with affinity and {x('axpy-medium-tbb_affinity-32')} for oneTBB
+  32 threads, against {x('axpy-medium-pfor-32')} for `pforeach` and {x('axpy-medium-tbb_affinity-32')} for oneTBB
   with affinity. On the 300-element triangle at 32 threads, oneTBB reaches
   {x('tri-medium-tbb-32')} and `pforeach` {x('tri-medium-pfor-32')}.
 
@@ -125,11 +137,16 @@ so that Julia's threads never sleep (`bench/wake/axpy1m.jl`,
 
 | Library | Julia | Back to back | After 2 ms idle | After 50 ms idle | Never sleep: back to back | 2 ms | 50 ms |
 |---|---|---|---|---|---|---|---|
-""" + "\n".join(gaprow(i, l) for i, l in GAP_ROWS) + """
+""" + "\n".join(gaprow(i, l) for i, l in GAP_ROWS) + f"""
 
 - **Polyester's lead comes from its workers spinning**: they spin for 2^20
   pauses (tens of ms) after a loop. After 50 ms idle, when they are asleep,
-  Polyester is as slow as the others.
+  it takes {g('Polyester', '1.13', 'after 50 ms idle')}, 8 times its back-to-back time.
+- **The parked designs were bimodal in these runs** (medians of three shown):
+  back to back, either 12–17 µs or about 220 µs, close to the serial time, as
+  if one worker was not woken in time. With threads never sleeping they were
+  fast in most runs. Earlier the same day, with the same builds, they took
+  16 µs and 12 µs every time, and the speedup table below is from those runs.
 - **Back to back, `pforeach` does not pay for wake-ups**: with Julia's threads
   never sleeping it runs the same. The gap to the spinning designs is the cost
   of starting helpers as new tasks through Julia's scheduler every loop.
@@ -148,21 +165,42 @@ runs one contiguous chunk per thread. Both run on Julia nightly
 (`bench/compare/`; the branch's file is evaluated into `Base.Threads`). Speedup
 at 32 threads, best in bold:
 
-| Workload | `pforeach` | `pforeach` affinity | ParkedWorkers.jl | `parallel_for` (branch) | `@threads` |
-|---|---|---|---|---|---|
+| Workload | `pforeach` | ParkedWorkers.jl | `parallel_for` (branch) | `@threads` |
+|---|---|---|---|---|
 """ + "\n".join(cmprow(w, n, 32) for w, n in CMP_W) + f"""
 
 - **They win medium loops back to back**, where their workers are still
-  spinning: {cx('axpy-1000000-branch-32')} for the branch against {cx('axpy-1000000-pfor_aff-32')} for `pforeach` with affinity on
-  1M-element `axpy`. With the threads asleep first (2 ms), `pforeach` with
-  affinity matches them: {cx('axpy_cold-1000000-pfor_aff-32')} against {cx('axpy_cold-1000000-branch-32')} for the branch.
+  spinning: {cx('axpy-1000000-branch-32')} for the branch against {cx('axpy-1000000-pfor-32')} for `pforeach` on
+  1M-element `axpy`. With the threads asleep first (2 ms), {cx('axpy_cold-1000000-pfor-32')} for
+  `pforeach` against {cx('axpy_cold-1000000-branch-32')} for the branch.
 - **`pforeach` wins short loops**, which they always split across every
   thread ({cx('axpy-1000-pfor-32')} against {cx('axpy-1000-branch-32')} on 1,000 elements), **and large uneven
   loops**, where one fixed chunk per thread leaves the last thread with most
   of the work ({cx('tri-3000-pfor-32')} against {cx('tri-3000-branch-32')} on the 3,000-element triangle).
 - At 63 threads, on this loaded machine, fixed chunks also stall on busy
-  cores: on 10M-element `axpy`, {cx('axpy-10000000-pfor_aff-63')} for `pforeach` with affinity against
+  cores: on 10M-element `axpy`, {cx('axpy-10000000-pfor-63')} for `pforeach` against
   {cx('axpy-10000000-branch-63')} for the branch.
+
+### Few long iterations
+
+`n` iterations that each spin for a fixed time (`bench/fewlong.jl`), against
+the ideal of `cld(n, threads)` iterations' time. `pforeach` uses one more task
+than `@threads` and Polyester (the caller), which is why 9 iterations at
+8 threads and 33 at 32 fit in one round:
+
+| Threads | n × iteration | Ideal | `pforeach` | `@threads :dynamic` | Polyester |
+|---|---|---|---|---|---|
+""" + "\n".join(fewrow(t, n, c) for t in FEW_T for c in (1000, 100) for n in FEW_N(t)) + f"""
+
+- **Up to as many iterations as threads,** `pforeach` starts one helper right
+  away, which brings in the others if the caller's first iteration is still
+  running after 20 µs (see How it works); without it, these loops took twice
+  the ideal. Bringing in 32 helpers that way takes about 150 µs, which is
+  why 32 iterations of 100 µs take 2.6 times the ideal at 32 threads.
+- **With more iterations than threads,** the first iteration still runs on
+  the caller alone, so the loop takes up to one iteration longer than ideal.
+  After it, the remaining iterations take 50–90 µs longer than ideal at
+  32 threads: the time for helpers to start.
 
 ### What made it faster
 
@@ -204,10 +242,12 @@ To rerun:
 ```
 julia +1.13 --project=bench -e 'using Pkg; Pkg.instantiate()'
 julia +1.13 -t8,1 --project=bench bench/bench.jl > bench/results/scaling/t8.txt
+julia +1.13 -t8,1 --project=bench bench/bench.jl serial pfor > bench/results/scaling/t8-pfor.txt  # pforeach rerun
 bench/tbb/build.sh            # uses oneTBB_jll, or set TBB_ROOT
 bench/tbb/bench_tbb 9 serial tbb tbb_affinity > bench/results/scaling/tbb-t8.txt
 julia bench/scaling_csv.jl > bench/results/scaling/scaling.csv   # all thread counts
 bench/wake/run.sh             # wake-up measurements; needs perf and strace
+julia +1.13 -t32,1 --project=bench bench/fewlong.jl > bench/results/fewlong.csv
 python3 bench/readme_perf.py  # this section
 ```
 

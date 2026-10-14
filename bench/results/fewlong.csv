@@ -1,0 +1,85 @@
+key,threads,n,cost_us,ideal_us,impl,label,us,over_ideal
+pfor-8-2-100,8,2,100,100,pfor,"pforeach",122,1.22
+pfor-8-4-100,8,4,100,100,pfor,"pforeach",131,1.31
+pfor-8-8-100,8,8,100,100,pfor,"pforeach",146,1.46
+pfor-8-9-100,8,9,100,200,pfor,"pforeach",151,0.76
+pfor-8-16-100,8,16,100,200,pfor,"pforeach",330,1.65
+pfor-8-32-100,8,32,100,400,pfor,"pforeach",528,1.32
+pfor-8-2-1000,8,2,1000,1000,pfor,"pforeach",1022,1.02
+pfor-8-4-1000,8,4,1000,1000,pfor,"pforeach",1041,1.04
+pfor-8-8-1000,8,8,1000,1000,pfor,"pforeach",1052,1.05
+pfor-8-9-1000,8,9,1000,2000,pfor,"pforeach",1051,0.53
+pfor-8-16-1000,8,16,1000,2000,pfor,"pforeach",3039,1.52
+pfor-8-32-1000,8,32,1000,4000,pfor,"pforeach",5035,1.26
+threads-8-2-100,8,2,100,100,threads,"@threads :dynamic",109,1.09
+threads-8-4-100,8,4,100,100,threads,"@threads :dynamic",114,1.14
+threads-8-8-100,8,8,100,100,threads,"@threads :dynamic",122,1.22
+threads-8-9-100,8,9,100,200,threads,"@threads :dynamic",217,1.08
+threads-8-16-100,8,16,100,200,threads,"@threads :dynamic",221,1.11
+threads-8-32-100,8,32,100,400,threads,"@threads :dynamic",421,1.05
+threads-8-2-1000,8,2,1000,1000,threads,"@threads :dynamic",1016,1.02
+threads-8-4-1000,8,4,1000,1000,threads,"@threads :dynamic",1020,1.02
+threads-8-8-1000,8,8,1000,1000,threads,"@threads :dynamic",1022,1.02
+threads-8-9-1000,8,9,1000,2000,threads,"@threads :dynamic",2020,1.01
+threads-8-16-1000,8,16,1000,2000,threads,"@threads :dynamic",2024,1.01
+threads-8-32-1000,8,32,1000,4000,threads,"@threads :dynamic",4027,1.01
+batch-8-2-100,8,2,100,100,batch,"Polyester @batch",101,1.01
+batch-8-4-100,8,4,100,100,batch,"Polyester @batch",102,1.02
+batch-8-8-100,8,8,100,100,batch,"Polyester @batch",103,1.03
+batch-8-9-100,8,9,100,200,batch,"Polyester @batch",201,1.01
+batch-8-16-100,8,16,100,200,batch,"Polyester @batch",203,1.01
+batch-8-32-100,8,32,100,400,batch,"Polyester @batch",403,1.01
+batch-8-2-1000,8,2,1000,1000,batch,"Polyester @batch",1001,1.00
+batch-8-4-1000,8,4,1000,1000,batch,"Polyester @batch",1001,1.00
+batch-8-8-1000,8,8,1000,1000,batch,"Polyester @batch",1003,1.00
+batch-8-9-1000,8,9,1000,2000,batch,"Polyester @batch",2001,1.00
+batch-8-16-1000,8,16,1000,2000,batch,"Polyester @batch",2003,1.00
+batch-8-32-1000,8,32,1000,4000,batch,"Polyester @batch",4003,1.00
+pfor-32-2-100,32,2,100,100,pfor,"pforeach",122,1.22
+pfor-32-4-100,32,4,100,100,pfor,"pforeach",140,1.40
+pfor-32-8-100,32,8,100,100,pfor,"pforeach",138,1.38
+pfor-32-16-100,32,16,100,100,pfor,"pforeach",153,1.53
+pfor-32-32-100,32,32,100,100,pfor,"pforeach",255,2.55
+pfor-32-33-100,32,33,100,200,pfor,"pforeach",251,1.25
+pfor-32-64-100,32,64,100,200,pfor,"pforeach",358,1.79
+pfor-32-128-100,32,128,100,400,pfor,"pforeach",549,1.37
+pfor-32-2-1000,32,2,1000,1000,pfor,"pforeach",1022,1.02
+pfor-32-4-1000,32,4,1000,1000,pfor,"pforeach",1041,1.04
+pfor-32-8-1000,32,8,1000,1000,pfor,"pforeach",1042,1.04
+pfor-32-16-1000,32,16,1000,1000,pfor,"pforeach",1058,1.06
+pfor-32-32-1000,32,32,1000,1000,pfor,"pforeach",1077,1.08
+pfor-32-33-1000,32,33,1000,2000,pfor,"pforeach",1082,0.54
+pfor-32-64-1000,32,64,1000,2000,pfor,"pforeach",3087,1.54
+pfor-32-128-1000,32,128,1000,4000,pfor,"pforeach",5082,1.27
+threads-32-2-100,32,2,100,100,threads,"@threads :dynamic",199,1.99
+threads-32-4-100,32,4,100,100,threads,"@threads :dynamic",195,1.95
+threads-32-8-100,32,8,100,100,threads,"@threads :dynamic",185,1.85
+threads-32-16-100,32,16,100,100,threads,"@threads :dynamic",182,1.82
+threads-32-32-100,32,32,100,100,threads,"@threads :dynamic",232,2.32
+threads-32-33-100,32,33,100,200,threads,"@threads :dynamic",228,1.14
+threads-32-64-100,32,64,100,200,threads,"@threads :dynamic",320,1.60
+threads-32-128-100,32,128,100,400,threads,"@threads :dynamic",526,1.32
+threads-32-2-1000,32,2,1000,1000,threads,"@threads :dynamic",1012,1.01
+threads-32-4-1000,32,4,1000,1000,threads,"@threads :dynamic",1019,1.02
+threads-32-8-1000,32,8,1000,1000,threads,"@threads :dynamic",1032,1.03
+threads-32-16-1000,32,16,1000,1000,threads,"@threads :dynamic",1082,1.08
+threads-32-32-1000,32,32,1000,1000,threads,"@threads :dynamic",1149,1.15
+threads-32-33-1000,32,33,1000,2000,threads,"@threads :dynamic",2019,1.01
+threads-32-64-1000,32,64,1000,2000,threads,"@threads :dynamic",2135,1.07
+threads-32-128-1000,32,128,1000,4000,threads,"@threads :dynamic",4134,1.03
+batch-32-2-100,32,2,100,100,batch,"Polyester @batch",101,1.01
+batch-32-4-100,32,4,100,100,batch,"Polyester @batch",102,1.02
+batch-32-8-100,32,8,100,100,batch,"Polyester @batch",102,1.02
+batch-32-16-100,32,16,100,100,batch,"Polyester @batch",104,1.04
+batch-32-32-100,32,32,100,100,batch,"Polyester @batch",107,1.07
+batch-32-33-100,32,33,100,200,batch,"Polyester @batch",202,1.01
+batch-32-64-100,32,64,100,200,batch,"Polyester @batch",207,1.03
+batch-32-128-100,32,128,100,400,batch,"Polyester @batch",407,1.02
+batch-32-2-1000,32,2,1000,1000,batch,"Polyester @batch",1001,1.00
+batch-32-4-1000,32,4,1000,1000,batch,"Polyester @batch",1002,1.00
+batch-32-8-1000,32,8,1000,1000,batch,"Polyester @batch",1003,1.00
+batch-32-16-1000,32,16,1000,1000,batch,"Polyester @batch",1004,1.00
+batch-32-32-1000,32,32,1000,1000,batch,"Polyester @batch",1007,1.01
+batch-32-33-1000,32,33,1000,2000,batch,"Polyester @batch",2002,1.00
+batch-32-64-1000,32,64,1000,2000,batch,"Polyester @batch",2008,1.00
+batch-32-128-1000,32,128,1000,4000,batch,"Polyester @batch",4008,1.00

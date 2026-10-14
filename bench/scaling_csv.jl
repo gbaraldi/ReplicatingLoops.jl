@@ -14,7 +14,6 @@ const CASES = Dict(("axpy", 10_000) => "small", ("axpy", 1_000_000) => "medium",
 # impl => (label, language, uses the calling thread too)
 const IMPLS = Dict(
     "pfor" => ("pforeach", "Julia", true),
-    "pfor_aff" => ("pforeach, affinity", "Julia", true),
     "threads" => ("@threads", "Julia", false),
     "batch" => ("Polyester @batch", "Julia", false),
     "omt" => ("OhMyThreads tforeach", "Julia", false),

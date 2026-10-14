@@ -62,7 +62,6 @@ axpy_parked!(y, x, a) = ParkedWorkers.pforeach(i -> axpy_el!(y, x, a, i), eachin
 axpy_branch!(y, x, a) = Base.Threads.parallel_for(i -> axpy_el!(y, x, a, i), eachindex(y))
 axpy_omt!(y, x, a) = tforeach(i -> axpy_el!(y, x, a, i), eachindex(y))
 axpy_pfor!(y, x, a) = pforeach(i -> axpy_el!(y, x, a, i), eachindex(y))
-axpy_pfor_aff!(y, x, a) = pforeach(i -> axpy_el!(y, x, a, i), eachindex(y); affinity = true)
 
 # Triangle: the cost of element i grows with i, so static splits are uneven.
 function tri_el!(out, i)
@@ -79,7 +78,6 @@ tri_parked!(out) = ParkedWorkers.pforeach(i -> tri_el!(out, i), eachindex(out))
 tri_branch!(out) = Base.Threads.parallel_for(i -> tri_el!(out, i), eachindex(out))
 tri_omt!(out) = tforeach(i -> tri_el!(out, i), eachindex(out))
 tri_pfor!(out) = pforeach(i -> tri_el!(out, i), eachindex(out))
-tri_pfor_aff!(out) = pforeach(i -> tri_el!(out, i), eachindex(out); affinity = true)
 
 const IMPLS = Dict(
     "serial" => (axpy_serial!, tri_serial!),
@@ -88,10 +86,9 @@ const IMPLS = Dict(
     "branch" => (axpy_branch!, tri_branch!),
     "omt" => (axpy_omt!, tri_omt!),
     "pfor" => (axpy_pfor!, tri_pfor!),
-    "pfor_aff" => (axpy_pfor_aff!, tri_pfor_aff!),
 )
 
-impls = isempty(ARGS) ? ["serial", "threads", "omt", "pfor", "pfor_aff", "parked", "branch"] : ARGS
+impls = isempty(ARGS) ? ["serial", "threads", "omt", "pfor", "parked", "branch"] : ARGS
 println("# nthreads default=", NT, " interactive=", nthreads(:interactive),
         " caller pool=", threadpool(), " julia=", VERSION)
 for name in impls

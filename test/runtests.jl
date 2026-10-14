@@ -19,8 +19,8 @@ end
 
     @testset "every element once" begin
         for n in (0, 1, 2, 3, 7, 64, 1000, 100_003)
-            for ntasks in (1, 2, 3, 8, 64), affinity in (false, true)
-                @test all(==(1), counts(n; ntasks, affinity))
+            for ntasks in (1, 2, 3, 8, 64)
+                @test all(==(1), counts(n; ntasks))
             end
             @test all(==(1), counts(n))
         end
@@ -180,10 +180,10 @@ end
         @test once(hits2)
     end
 
-    @testset "affinity" begin
+    @testset "blocks" begin
         for n in (1000, 100_003), cost in (0, 1_000)
             hits = tally(n)
-            pforeach(1:n; affinity = true) do i
+            pforeach(1:n) do i
                 cost > 0 && busy(cost)
                 hit!(hits, i)
             end
@@ -191,7 +191,7 @@ end
         end
         # Uneven cost: blocks finish at different times and tasks help others.
         hits = tally(400)
-        pforeach(1:400; affinity = true) do i
+        pforeach(1:400) do i
             busy(100 * i)
             hit!(hits, i)
         end
@@ -203,10 +203,10 @@ end
         # The first calls may finish while helper code is still compiling.
         t0 = time()
         while time() - t0 < 1
-            pforeach(mark, 1:4000; affinity = true)
+            pforeach(mark, 1:4000)
         end
         first_run = copy(tids)
-        pforeach(mark, 1:4000; affinity = true)
+        pforeach(mark, 1:4000)
         if nthreads(:default) > 1
             @test length(unique(tids)) > 1
             @test count(tids .== first_run) > length(tids) ÷ 2
@@ -214,7 +214,7 @@ end
 
         for _ in 1:20
             e = try
-                pforeach(i -> (busy(2_000); i == 1000 && error("late")), 1:1000; affinity = true)
+                pforeach(i -> (busy(2_000); i == 1000 && error("late")), 1:1000)
                 nothing
             catch err
                 err
@@ -223,8 +223,8 @@ end
         end
 
         hits2 = tally(64 * 64)
-        pforeach(1:64; affinity = true) do j
-            pforeach(1:64; affinity = true) do i
+        pforeach(1:64) do j
+            pforeach(1:64) do i
                 busy(2_000)
                 hit!(hits2, (j - 1) * 64 + i)
             end
@@ -232,10 +232,38 @@ end
         @test once(hits2)
 
         out = zeros(Int, 1000)
-        @pfor affinity = true for i in 1:1000
+        @pfor ntasks = 4 for i in 1:1000
             out[i] = i
         end
         @test out == 1:1000
+    end
+
+    @testset "few long iterations" begin
+        # As many iterations as threads: a watcher starts helpers while the
+        # caller is still in its first iteration, so they all start together.
+        for n in (2, min(nthreads(:default), 8))
+            n >= 2 && nthreads(:default) >= n || continue
+            starts = zeros(UInt64, n)
+            t0 = time_ns()
+            pforeach(1:n) do i
+                starts[i] = time_ns() - t0
+                busy(30_000_000)
+            end
+            @test maximum(starts) - minimum(starts) < 20_000_000
+        end
+        # An error in the caller's first iteration stops the watcher's helpers.
+        if nthreads(:default) >= 2
+            for _ in 1:20
+                e = try
+                    pforeach(i -> (i == 1 ? (busy(50_000); error("first")) : busy(50_000)), 1:2)
+                    nothing
+                catch err
+                    err
+                end
+                @test e isa CompositeException && e.exceptions[1].ex == ErrorException("first")
+            end
+            @test all(==(1), counts(2; ntasks = 2))
+        end
     end
 
     @testset "interrupted caller waits for running chunks" begin
@@ -304,7 +332,7 @@ end
         # Block boundaries must not overflow for huge lazy ranges.
         @test_throws ArgumentError pforeach(identity, 1:typemax(Int); ntasks = 4)
         e = try
-            pforeach(i -> i > 1 && error("x"), 1:3_000_000_000_000_000_000 ÷ 8; ntasks = 4, affinity = true)
+            pforeach(i -> i > 1 && error("x"), 1:3_000_000_000_000_000_000 ÷ 8; ntasks = 4)
             nothing
         catch err
             err

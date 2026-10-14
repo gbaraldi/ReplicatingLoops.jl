@@ -5,12 +5,9 @@ axpy-large-batch-1,axpy,large,10000000,batch,"Polyester @batch",Julia,1,1,357374
 axpy-small-omt-1,axpy,small,10000,omt,"OhMyThreads tforeach",Julia,1,1,2199,1540,1.54,0.7
 axpy-medium-omt-1,axpy,medium,1000000,omt,"OhMyThreads tforeach",Julia,1,1,220471,204281,204.0,0.927
 axpy-large-omt-1,axpy,large,10000000,omt,"OhMyThreads tforeach",Julia,1,1,3702834,4046683,4050.0,1.09
-axpy-small-pfor-1,axpy,small,10000,pfor,"pforeach",Julia,1,2,2575,1540,1.54,0.598
-axpy-medium-pfor-1,axpy,medium,1000000,pfor,"pforeach",Julia,1,2,151458,206857,207.0,1.37
-axpy-large-pfor-1,axpy,large,10000000,pfor,"pforeach",Julia,1,2,2407131,4059167,4060.0,1.69
-axpy-small-pfor_aff-1,axpy,small,10000,pfor_aff,"pforeach, affinity",Julia,1,2,2585,1540,1.54,0.596
-axpy-medium-pfor_aff-1,axpy,medium,1000000,pfor_aff,"pforeach, affinity",Julia,1,2,114411,206857,207.0,1.81
-axpy-large-pfor_aff-1,axpy,large,10000000,pfor_aff,"pforeach, affinity",Julia,1,2,1854020,4059167,4060.0,2.19
+axpy-small-pfor-1,axpy,small,10000,pfor,"pforeach",Julia,1,2,2538,1540,1.54,0.607
+axpy-medium-pfor-1,axpy,medium,1000000,pfor,"pforeach",Julia,1,2,111214,204818,205.0,1.84
+axpy-large-pfor-1,axpy,large,10000000,pfor,"pforeach",Julia,1,2,1831824,3544773,3540.0,1.94
 axpy-small-threads-1,axpy,small,10000,threads,"@threads",Julia,1,1,7537,1540,1.54,0.204
 axpy-medium-threads-1,axpy,medium,1000000,threads,"@threads",Julia,1,1,220301,204281,204.0,0.927
 axpy-large-threads-1,axpy,large,10000000,threads,"@threads",Julia,1,1,4059244,4046683,4050.0,0.997
@@ -18,10 +15,8 @@ axpy_cold-small-batch-1,axpy_cold,small,10000,batch,"Polyester @batch",Julia,1,1
 axpy_cold-medium-batch-1,axpy_cold,medium,1000000,batch,"Polyester @batch",Julia,1,1,211816,214556,215.0,1.01
 axpy_cold-small-omt-1,axpy_cold,small,10000,omt,"OhMyThreads tforeach",Julia,1,1,2440,1680,1.68,0.689
 axpy_cold-medium-omt-1,axpy_cold,medium,1000000,omt,"OhMyThreads tforeach",Julia,1,1,227516,214556,215.0,0.943
-axpy_cold-small-pfor-1,axpy_cold,small,10000,pfor,"pforeach",Julia,1,2,2860,1680,1.68,0.587
-axpy_cold-medium-pfor-1,axpy_cold,medium,1000000,pfor,"pforeach",Julia,1,2,149824,212684,213.0,1.42
-axpy_cold-small-pfor_aff-1,axpy_cold,small,10000,pfor_aff,"pforeach, affinity",Julia,1,2,3140,1680,1.68,0.535
-axpy_cold-medium-pfor_aff-1,axpy_cold,medium,1000000,pfor_aff,"pforeach, affinity",Julia,1,2,125843,212684,213.0,1.69
+axpy_cold-small-pfor-1,axpy_cold,small,10000,pfor,"pforeach",Julia,1,2,2940,1681,1.68,0.572
+axpy_cold-medium-pfor-1,axpy_cold,medium,1000000,pfor,"pforeach",Julia,1,2,123043,213135,213.0,1.73
 axpy_cold-small-threads-1,axpy_cold,small,10000,threads,"@threads",Julia,1,1,11670,1680,1.68,0.144
 axpy_cold-medium-threads-1,axpy_cold,medium,1000000,threads,"@threads",Julia,1,1,232826,214556,215.0,0.922
 tri-small-batch-1,tri,small,30,batch,"Polyester @batch",Julia,1,1,2517,2461,2.46,0.978
@@ -30,12 +25,9 @@ tri-large-batch-1,tri,large,3000,batch,"Polyester @batch",Julia,1,1,37315395,374
 tri-small-omt-1,tri,small,30,omt,"OhMyThreads tforeach",Julia,1,1,2458,2461,2.46,1.0
 tri-medium-omt-1,tri,medium,300,omt,"OhMyThreads tforeach",Julia,1,1,287993,287688,288.0,0.999
 tri-large-omt-1,tri,large,3000,omt,"OhMyThreads tforeach",Julia,1,1,29245579,37463129,37500.0,1.28
-tri-small-pfor-1,tri,small,30,pfor,"pforeach",Julia,1,2,2945,2461,2.46,0.836
-tri-medium-pfor-1,tri,medium,300,pfor,"pforeach",Julia,1,2,153093,287271,287.0,1.88
-tri-large-pfor-1,tri,large,3000,pfor,"pforeach",Julia,1,2,18879963,37262103,37300.0,1.97
-tri-small-pfor_aff-1,tri,small,30,pfor_aff,"pforeach, affinity",Julia,1,2,3129,2461,2.46,0.787
-tri-medium-pfor_aff-1,tri,medium,300,pfor_aff,"pforeach, affinity",Julia,1,2,150463,287271,287.0,1.91
-tri-large-pfor_aff-1,tri,large,3000,pfor_aff,"pforeach, affinity",Julia,1,2,18872513,37262103,37300.0,1.97
+tri-small-pfor-1,tri,small,30,pfor,"pforeach",Julia,1,2,3142,2459,2.46,0.783
+tri-medium-pfor-1,tri,medium,300,pfor,"pforeach",Julia,1,2,154179,287155,287.0,1.86
+tri-large-pfor-1,tri,large,3000,pfor,"pforeach",Julia,1,2,16718062,37244084,37200.0,2.23
 tri-small-threads-1,tri,small,30,threads,"@threads",Julia,1,1,8225,2461,2.46,0.299
 tri-medium-threads-1,tri,medium,300,threads,"@threads",Julia,1,1,306484,287688,288.0,0.939
 tri-large-threads-1,tri,large,3000,threads,"@threads",Julia,1,1,37310895,37463129,37500.0,1.0
@@ -61,12 +53,9 @@ axpy-large-batch-2,axpy,large,10000000,batch,"Polyester @batch",Julia,2,2,313105
 axpy-small-omt-2,axpy,small,10000,omt,"OhMyThreads tforeach",Julia,2,2,12224,1541,1.54,0.126
 axpy-medium-omt-2,axpy,medium,1000000,omt,"OhMyThreads tforeach",Julia,2,2,123537,204976,205.0,1.66
 axpy-large-omt-2,axpy,large,10000000,omt,"OhMyThreads tforeach",Julia,2,2,1911698,4083805,4080.0,2.14
-axpy-small-pfor-2,axpy,small,10000,pfor,"pforeach",Julia,2,3,2503,1548,1.55,0.618
-axpy-medium-pfor-2,axpy,medium,1000000,pfor,"pforeach",Julia,2,3,129070,205229,205.0,1.59
-axpy-large-pfor-2,axpy,large,10000000,pfor,"pforeach",Julia,2,3,1861205,4071577,4070.0,2.19
-axpy-small-pfor_aff-2,axpy,small,10000,pfor_aff,"pforeach, affinity",Julia,2,3,2832,1548,1.55,0.547
-axpy-medium-pfor_aff-2,axpy,medium,1000000,pfor_aff,"pforeach, affinity",Julia,2,3,80504,205229,205.0,2.55
-axpy-large-pfor_aff-2,axpy,large,10000000,pfor_aff,"pforeach, affinity",Julia,2,3,1178480,4071577,4070.0,3.45
+axpy-small-pfor-2,axpy,small,10000,pfor,"pforeach",Julia,2,3,2601,1540,1.54,0.592
+axpy-medium-pfor-2,axpy,medium,1000000,pfor,"pforeach",Julia,2,3,80625,206078,206.0,2.56
+axpy-large-pfor-2,axpy,large,10000000,pfor,"pforeach",Julia,2,3,1178406,4027956,4030.0,3.42
 axpy-small-threads-2,axpy,small,10000,threads,"@threads",Julia,2,2,10542,1541,1.54,0.146
 axpy-medium-threads-2,axpy,medium,1000000,threads,"@threads",Julia,2,2,106218,204976,205.0,1.93
 axpy-large-threads-2,axpy,large,10000000,threads,"@threads",Julia,2,2,2603953,4083805,4080.0,1.57
@@ -74,10 +63,8 @@ axpy_cold-small-batch-2,axpy_cold,small,10000,batch,"Polyester @batch",Julia,2,2
 axpy_cold-medium-batch-2,axpy_cold,medium,1000000,batch,"Polyester @batch",Julia,2,2,309939,211756,212.0,0.683
 axpy_cold-small-omt-2,axpy_cold,small,10000,omt,"OhMyThreads tforeach",Julia,2,2,23560,1691,1.69,0.0718
 axpy_cold-medium-omt-2,axpy_cold,medium,1000000,omt,"OhMyThreads tforeach",Julia,2,2,154394,211756,212.0,1.37
-axpy_cold-small-pfor-2,axpy_cold,small,10000,pfor,"pforeach",Julia,2,3,2820,1910,1.91,0.677
-axpy_cold-medium-pfor-2,axpy_cold,medium,1000000,pfor,"pforeach",Julia,2,3,147833,211814,212.0,1.43
-axpy_cold-small-pfor_aff-2,axpy_cold,small,10000,pfor_aff,"pforeach, affinity",Julia,2,3,3250,1910,1.91,0.588
-axpy_cold-medium-pfor_aff-2,axpy_cold,medium,1000000,pfor_aff,"pforeach, affinity",Julia,2,3,92262,211814,212.0,2.3
+axpy_cold-small-pfor-2,axpy_cold,small,10000,pfor,"pforeach",Julia,2,3,2960,1680,1.68,0.568
+axpy_cold-medium-pfor-2,axpy_cold,medium,1000000,pfor,"pforeach",Julia,2,3,90703,215116,215.0,2.37
 axpy_cold-small-threads-2,axpy_cold,small,10000,threads,"@threads",Julia,2,2,19761,1691,1.69,0.0856
 axpy_cold-medium-threads-2,axpy_cold,medium,1000000,threads,"@threads",Julia,2,2,131384,211756,212.0,1.61
 tri-small-batch-2,tri,small,30,batch,"Polyester @batch",Julia,2,2,2373,2457,2.46,1.04
@@ -86,12 +73,9 @@ tri-large-batch-2,tri,large,3000,batch,"Polyester @batch",Julia,2,2,21916423,372
 tri-small-omt-2,tri,small,30,omt,"OhMyThreads tforeach",Julia,2,2,8276,2457,2.46,0.297
 tri-medium-omt-2,tri,medium,300,omt,"OhMyThreads tforeach",Julia,2,2,242654,287463,287.0,1.18
 tri-large-omt-2,tri,large,3000,omt,"OhMyThreads tforeach",Julia,2,2,22014147,37261593,37300.0,1.69
-tri-small-pfor-2,tri,small,30,pfor,"pforeach",Julia,2,3,3060,2489,2.49,0.813
-tri-medium-pfor-2,tri,medium,300,pfor,"pforeach",Julia,2,3,109330,287808,288.0,2.63
-tri-large-pfor-2,tri,large,3000,pfor,"pforeach",Julia,2,3,12601861,37233459,37200.0,2.95
-tri-small-pfor_aff-2,tri,small,30,pfor_aff,"pforeach, affinity",Julia,2,3,3135,2489,2.49,0.794
-tri-medium-pfor_aff-2,tri,medium,300,pfor_aff,"pforeach, affinity",Julia,2,3,106531,287808,288.0,2.7
-tri-large-pfor_aff-2,tri,large,3000,pfor_aff,"pforeach, affinity",Julia,2,3,10471376,37233459,37200.0,3.56
+tri-small-pfor-2,tri,small,30,pfor,"pforeach",Julia,2,3,3137,2498,2.5,0.796
+tri-medium-pfor-2,tri,medium,300,pfor,"pforeach",Julia,2,3,109782,287350,287.0,2.62
+tri-large-pfor-2,tri,large,3000,pfor,"pforeach",Julia,2,3,11623407,37210834,37200.0,3.2
 tri-small-threads-2,tri,small,30,threads,"@threads",Julia,2,2,9574,2457,2.46,0.257
 tri-medium-threads-2,tri,medium,300,threads,"@threads",Julia,2,2,238369,287463,287.0,1.21
 tri-large-threads-2,tri,large,3000,threads,"@threads",Julia,2,2,29359622,37261593,37300.0,1.27
@@ -117,12 +101,9 @@ axpy-large-batch-4,axpy,large,10000000,batch,"Polyester @batch",Julia,4,4,156214
 axpy-small-omt-4,axpy,small,10000,omt,"OhMyThreads tforeach",Julia,4,4,14938,1540,1.54,0.103
 axpy-medium-omt-4,axpy,medium,1000000,omt,"OhMyThreads tforeach",Julia,4,4,123294,203881,204.0,1.65
 axpy-large-omt-4,axpy,large,10000000,omt,"OhMyThreads tforeach",Julia,4,4,1600935,4098855,4100.0,2.56
-axpy-small-pfor-4,axpy,small,10000,pfor,"pforeach",Julia,4,5,2694,1558,1.56,0.578
-axpy-medium-pfor-4,axpy,medium,1000000,pfor,"pforeach",Julia,4,5,106414,205730,206.0,1.93
-axpy-large-pfor-4,axpy,large,10000000,pfor,"pforeach",Julia,4,5,1361234,4065398,4070.0,2.99
-axpy-small-pfor_aff-4,axpy,small,10000,pfor_aff,"pforeach, affinity",Julia,4,5,2794,1558,1.56,0.558
-axpy-medium-pfor_aff-4,axpy,medium,1000000,pfor_aff,"pforeach, affinity",Julia,4,5,57505,205730,206.0,3.58
-axpy-large-pfor_aff-4,axpy,large,10000000,pfor_aff,"pforeach, affinity",Julia,4,5,650954,4065398,4070.0,6.25
+axpy-small-pfor-4,axpy,small,10000,pfor,"pforeach",Julia,4,5,2581,1540,1.54,0.597
+axpy-medium-pfor-4,axpy,medium,1000000,pfor,"pforeach",Julia,4,5,59729,205140,205.0,3.43
+axpy-large-pfor-4,axpy,large,10000000,pfor,"pforeach",Julia,4,5,692754,3617976,3620.0,5.22
 axpy-small-threads-4,axpy,small,10000,threads,"@threads",Julia,4,4,15104,1540,1.54,0.102
 axpy-medium-threads-4,axpy,medium,1000000,threads,"@threads",Julia,4,4,96738,203881,204.0,2.11
 axpy-large-threads-4,axpy,large,10000000,threads,"@threads",Julia,4,4,2129630,4098855,4100.0,1.92
@@ -130,10 +111,8 @@ axpy_cold-small-batch-4,axpy_cold,small,10000,batch,"Polyester @batch",Julia,4,4
 axpy_cold-medium-batch-4,axpy_cold,medium,1000000,batch,"Polyester @batch",Julia,4,4,156924,214037,214.0,1.36
 axpy_cold-small-omt-4,axpy_cold,small,10000,omt,"OhMyThreads tforeach",Julia,4,4,27981,1690,1.69,0.0604
 axpy_cold-medium-omt-4,axpy_cold,medium,1000000,omt,"OhMyThreads tforeach",Julia,4,4,101813,214037,214.0,2.1
-axpy_cold-small-pfor-4,axpy_cold,small,10000,pfor,"pforeach",Julia,4,5,3170,1690,1.69,0.533
-axpy_cold-medium-pfor-4,axpy_cold,medium,1000000,pfor,"pforeach",Julia,4,5,104112,212465,212.0,2.04
-axpy_cold-small-pfor_aff-4,axpy_cold,small,10000,pfor_aff,"pforeach, affinity",Julia,4,5,3311,1690,1.69,0.51
-axpy_cold-medium-pfor_aff-4,axpy_cold,medium,1000000,pfor_aff,"pforeach, affinity",Julia,4,5,71411,212465,212.0,2.98
+axpy_cold-small-pfor-4,axpy_cold,small,10000,pfor,"pforeach",Julia,4,5,2880,1680,1.68,0.583
+axpy_cold-medium-pfor-4,axpy_cold,medium,1000000,pfor,"pforeach",Julia,4,5,75852,213175,213.0,2.81
 axpy_cold-small-threads-4,axpy_cold,small,10000,threads,"@threads",Julia,4,4,22850,1690,1.69,0.074
 axpy_cold-medium-threads-4,axpy_cold,medium,1000000,threads,"@threads",Julia,4,4,107103,214037,214.0,2.0
 tri-small-batch-4,tri,small,30,batch,"Polyester @batch",Julia,4,4,1860,2458,2.46,1.32
@@ -142,12 +121,9 @@ tri-large-batch-4,tri,large,3000,batch,"Polyester @batch",Julia,4,4,17504340,372
 tri-small-omt-4,tri,small,30,omt,"OhMyThreads tforeach",Julia,4,4,14730,2458,2.46,0.167
 tri-medium-omt-4,tri,medium,300,omt,"OhMyThreads tforeach",Julia,4,4,155127,287220,287.0,1.85
 tri-large-omt-4,tri,large,3000,omt,"OhMyThreads tforeach",Julia,4,4,12931392,37249952,37200.0,2.88
-tri-small-pfor-4,tri,small,30,pfor,"pforeach",Julia,4,5,3008,2460,2.46,0.818
-tri-medium-pfor-4,tri,medium,300,pfor,"pforeach",Julia,4,5,76434,287269,287.0,3.76
-tri-large-pfor-4,tri,large,3000,pfor,"pforeach",Julia,4,5,6830118,37279096,37300.0,5.46
-tri-small-pfor_aff-4,tri,small,30,pfor_aff,"pforeach, affinity",Julia,4,5,3160,2460,2.46,0.778
-tri-medium-pfor_aff-4,tri,medium,300,pfor_aff,"pforeach, affinity",Julia,4,5,74214,287269,287.0,3.87
-tri-large-pfor_aff-4,tri,large,3000,pfor_aff,"pforeach, affinity",Julia,4,5,6175114,37279096,37300.0,6.04
+tri-small-pfor-4,tri,small,30,pfor,"pforeach",Julia,4,5,3142,2508,2.51,0.798
+tri-medium-pfor-4,tri,medium,300,pfor,"pforeach",Julia,4,5,85726,287312,287.0,3.35
+tri-large-pfor-4,tri,large,3000,pfor,"pforeach",Julia,4,5,7225511,37215544,37200.0,5.15
 tri-small-threads-4,tri,small,30,threads,"@threads",Julia,4,4,10931,2458,2.46,0.225
 tri-medium-threads-4,tri,medium,300,threads,"@threads",Julia,4,4,139522,287220,287.0,2.06
 tri-large-threads-4,tri,large,3000,threads,"@threads",Julia,4,4,12896930,37249952,37200.0,2.89
@@ -173,12 +149,9 @@ axpy-large-batch-8,axpy,large,10000000,batch,"Polyester @batch",Julia,8,8,778022
 axpy-small-omt-8,axpy,small,10000,omt,"OhMyThreads tforeach",Julia,8,8,23338,1540,1.54,0.066
 axpy-medium-omt-8,axpy,medium,1000000,omt,"OhMyThreads tforeach",Julia,8,8,93320,204528,205.0,2.19
 axpy-large-omt-8,axpy,large,10000000,omt,"OhMyThreads tforeach",Julia,8,8,1173862,4024813,4020.0,3.43
-axpy-small-pfor-8,axpy,small,10000,pfor,"pforeach",Julia,8,9,2625,1540,1.54,0.587
-axpy-medium-pfor-8,axpy,medium,1000000,pfor,"pforeach",Julia,8,9,109790,204694,205.0,1.86
-axpy-large-pfor-8,axpy,large,10000000,pfor,"pforeach",Julia,8,9,1939342,3588768,3590.0,1.85
-axpy-small-pfor_aff-8,axpy,small,10000,pfor_aff,"pforeach, affinity",Julia,8,9,2683,1540,1.54,0.574
-axpy-medium-pfor_aff-8,axpy,medium,1000000,pfor_aff,"pforeach, affinity",Julia,8,9,48082,204694,205.0,4.26
-axpy-large-pfor_aff-8,axpy,large,10000000,pfor_aff,"pforeach, affinity",Julia,8,9,330055,3588768,3590.0,10.9
+axpy-small-pfor-8,axpy,small,10000,pfor,"pforeach",Julia,8,9,2599,1560,1.56,0.6
+axpy-medium-pfor-8,axpy,medium,1000000,pfor,"pforeach",Julia,8,9,45986,204535,205.0,4.45
+axpy-large-pfor-8,axpy,large,10000000,pfor,"pforeach",Julia,8,9,320418,3567044,3570.0,11.1
 axpy-small-threads-8,axpy,small,10000,threads,"@threads",Julia,8,8,25836,1540,1.54,0.0596
 axpy-medium-threads-8,axpy,medium,1000000,threads,"@threads",Julia,8,8,86629,204528,205.0,2.36
 axpy-large-threads-8,axpy,large,10000000,threads,"@threads",Julia,8,8,1169238,4024813,4020.0,3.44
@@ -186,10 +159,8 @@ axpy_cold-small-batch-8,axpy_cold,small,10000,batch,"Polyester @batch",Julia,8,8
 axpy_cold-medium-batch-8,axpy_cold,medium,1000000,batch,"Polyester @batch",Julia,8,8,80262,213706,214.0,2.66
 axpy_cold-small-omt-8,axpy_cold,small,10000,omt,"OhMyThreads tforeach",Julia,8,8,27161,1690,1.69,0.0622
 axpy_cold-medium-omt-8,axpy_cold,medium,1000000,omt,"OhMyThreads tforeach",Julia,8,8,130804,213706,214.0,1.63
-axpy_cold-small-pfor-8,axpy_cold,small,10000,pfor,"pforeach",Julia,8,9,2920,1680,1.68,0.575
-axpy_cold-medium-pfor-8,axpy_cold,medium,1000000,pfor,"pforeach",Julia,8,9,128083,212505,213.0,1.66
-axpy_cold-small-pfor_aff-8,axpy_cold,small,10000,pfor_aff,"pforeach, affinity",Julia,8,9,3150,1680,1.68,0.533
-axpy_cold-medium-pfor_aff-8,axpy_cold,medium,1000000,pfor_aff,"pforeach, affinity",Julia,8,9,71352,212505,213.0,2.98
+axpy_cold-small-pfor-8,axpy_cold,small,10000,pfor,"pforeach",Julia,8,9,2820,1689,1.69,0.599
+axpy_cold-medium-pfor-8,axpy_cold,medium,1000000,pfor,"pforeach",Julia,8,9,62112,215126,215.0,3.46
 axpy_cold-small-threads-8,axpy_cold,small,10000,threads,"@threads",Julia,8,8,25110,1690,1.69,0.0673
 axpy_cold-medium-threads-8,axpy_cold,medium,1000000,threads,"@threads",Julia,8,8,111823,213706,214.0,1.91
 tri-small-batch-8,tri,small,30,batch,"Polyester @batch",Julia,8,8,2480,2458,2.46,0.991
@@ -198,12 +169,9 @@ tri-large-batch-8,tri,large,3000,batch,"Polyester @batch",Julia,8,8,9581368,3626
 tri-small-omt-8,tri,small,30,omt,"OhMyThreads tforeach",Julia,8,8,22533,2458,2.46,0.109
 tri-medium-omt-8,tri,medium,300,omt,"OhMyThreads tforeach",Julia,8,8,91581,287008,287.0,3.13
 tri-large-omt-8,tri,large,3000,omt,"OhMyThreads tforeach",Julia,8,8,6933564,36266944,36300.0,5.23
-tri-small-pfor-8,tri,small,30,pfor,"pforeach",Julia,8,9,3065,2459,2.46,0.802
-tri-medium-pfor-8,tri,medium,300,pfor,"pforeach",Julia,8,9,56601,287324,287.0,5.08
-tri-large-pfor-8,tri,large,3000,pfor,"pforeach",Julia,8,9,3991907,37228500,37200.0,9.33
-tri-small-pfor_aff-8,tri,small,30,pfor_aff,"pforeach, affinity",Julia,8,9,3060,2459,2.46,0.804
-tri-medium-pfor_aff-8,tri,medium,300,pfor_aff,"pforeach, affinity",Julia,8,9,53621,287324,287.0,5.36
-tri-large-pfor_aff-8,tri,large,3000,pfor_aff,"pforeach, affinity",Julia,8,9,4169061,37228500,37200.0,8.93
+tri-small-pfor-8,tri,small,30,pfor,"pforeach",Julia,8,9,3139,2457,2.46,0.783
+tri-medium-pfor-8,tri,medium,300,pfor,"pforeach",Julia,8,9,60129,287210,287.0,4.78
+tri-large-pfor-8,tri,large,3000,pfor,"pforeach",Julia,8,9,4172480,37281625,37300.0,8.94
 tri-small-threads-8,tri,small,30,threads,"@threads",Julia,8,8,21106,2458,2.46,0.116
 tri-medium-threads-8,tri,medium,300,threads,"@threads",Julia,8,8,87540,287008,287.0,3.28
 tri-large-threads-8,tri,large,3000,threads,"@threads",Julia,8,8,9653950,36266944,36300.0,3.76
@@ -229,12 +197,9 @@ axpy-large-batch-16,axpy,large,10000000,batch,"Polyester @batch",Julia,16,16,233
 axpy-small-omt-16,axpy,small,10000,omt,"OhMyThreads tforeach",Julia,16,16,42861,1541,1.54,0.036
 axpy-medium-omt-16,axpy,medium,1000000,omt,"OhMyThreads tforeach",Julia,16,16,119721,204128,204.0,1.71
 axpy-large-omt-16,axpy,large,10000000,omt,"OhMyThreads tforeach",Julia,16,16,815478,4032503,4030.0,4.94
-axpy-small-pfor-16,axpy,small,10000,pfor,"pforeach",Julia,16,17,2528,1546,1.55,0.612
-axpy-medium-pfor-16,axpy,medium,1000000,pfor,"pforeach",Julia,16,17,107992,205397,205.0,1.9
-axpy-large-pfor-16,axpy,large,10000000,pfor,"pforeach",Julia,16,17,1687157,3597258,3600.0,2.13
-axpy-small-pfor_aff-16,axpy,small,10000,pfor_aff,"pforeach, affinity",Julia,16,17,2624,1546,1.55,0.589
-axpy-medium-pfor_aff-16,axpy,medium,1000000,pfor_aff,"pforeach, affinity",Julia,16,17,38592,205397,205.0,5.32
-axpy-large-pfor_aff-16,axpy,large,10000000,pfor_aff,"pforeach, affinity",Julia,16,17,159868,3597258,3600.0,22.5
+axpy-small-pfor-16,axpy,small,10000,pfor,"pforeach",Julia,16,17,2761,1540,1.54,0.558
+axpy-medium-pfor-16,axpy,medium,1000000,pfor,"pforeach",Julia,16,17,39631,204940,205.0,5.17
+axpy-large-pfor-16,axpy,large,10000000,pfor,"pforeach",Julia,16,17,159082,3545313,3550.0,22.3
 axpy-small-threads-16,axpy,small,10000,threads,"@threads",Julia,16,16,49984,1541,1.54,0.0308
 axpy-medium-threads-16,axpy,medium,1000000,threads,"@threads",Julia,16,16,79875,204128,204.0,2.56
 axpy-large-threads-16,axpy,large,10000000,threads,"@threads",Julia,16,16,1046474,4032503,4030.0,3.85
@@ -242,10 +207,8 @@ axpy_cold-small-batch-16,axpy_cold,small,10000,batch,"Polyester @batch",Julia,16
 axpy_cold-medium-batch-16,axpy_cold,medium,1000000,batch,"Polyester @batch",Julia,16,16,28701,216496,216.0,7.54
 axpy_cold-small-omt-16,axpy_cold,small,10000,omt,"OhMyThreads tforeach",Julia,16,16,45451,1690,1.69,0.0372
 axpy_cold-medium-omt-16,axpy_cold,medium,1000000,omt,"OhMyThreads tforeach",Julia,16,16,114913,216496,216.0,1.88
-axpy_cold-small-pfor-16,axpy_cold,small,10000,pfor,"pforeach",Julia,16,17,2840,1690,1.69,0.595
-axpy_cold-medium-pfor-16,axpy_cold,medium,1000000,pfor,"pforeach",Julia,16,17,128243,214114,214.0,1.67
-axpy_cold-small-pfor_aff-16,axpy_cold,small,10000,pfor_aff,"pforeach, affinity",Julia,16,17,3070,1690,1.69,0.55
-axpy_cold-medium-pfor_aff-16,axpy_cold,medium,1000000,pfor_aff,"pforeach, affinity",Julia,16,17,60071,214114,214.0,3.56
+axpy_cold-small-pfor-16,axpy_cold,small,10000,pfor,"pforeach",Julia,16,17,3090,1690,1.69,0.547
+axpy_cold-medium-pfor-16,axpy_cold,medium,1000000,pfor,"pforeach",Julia,16,17,61582,214985,215.0,3.49
 axpy_cold-small-threads-16,axpy_cold,small,10000,threads,"@threads",Julia,16,16,44071,1690,1.69,0.0383
 axpy_cold-medium-threads-16,axpy_cold,medium,1000000,threads,"@threads",Julia,16,16,99133,216496,216.0,2.18
 tri-small-batch-16,tri,small,30,batch,"Polyester @batch",Julia,16,16,3559,2459,2.46,0.691
@@ -254,12 +217,9 @@ tri-large-batch-16,tri,large,3000,batch,"Polyester @batch",Julia,16,16,4985460,3
 tri-small-omt-16,tri,small,30,omt,"OhMyThreads tforeach",Julia,16,16,43004,2459,2.46,0.0572
 tri-medium-omt-16,tri,medium,300,omt,"OhMyThreads tforeach",Julia,16,16,76541,287578,288.0,3.76
 tri-large-omt-16,tri,large,3000,omt,"OhMyThreads tforeach",Julia,16,16,3628892,37243441,37200.0,10.3
-tri-small-pfor-16,tri,small,30,pfor,"pforeach",Julia,16,17,2986,2461,2.46,0.824
-tri-medium-pfor-16,tri,medium,300,pfor,"pforeach",Julia,16,17,48381,287421,287.0,5.94
-tri-large-pfor-16,tri,large,3000,pfor,"pforeach",Julia,16,17,2189508,37221205,37200.0,17.0
-tri-small-pfor_aff-16,tri,small,30,pfor_aff,"pforeach, affinity",Julia,16,17,3076,2461,2.46,0.8
-tri-medium-pfor_aff-16,tri,medium,300,pfor_aff,"pforeach, affinity",Julia,16,17,49254,287421,287.0,5.84
-tri-large-pfor_aff-16,tri,large,3000,pfor_aff,"pforeach, affinity",Julia,16,17,2341101,37221205,37200.0,15.9
+tri-small-pfor-16,tri,small,30,pfor,"pforeach",Julia,16,17,3137,2458,2.46,0.784
+tri-medium-pfor-16,tri,medium,300,pfor,"pforeach",Julia,16,17,52324,287400,287.0,5.49
+tri-large-pfor-16,tri,large,3000,pfor,"pforeach",Julia,16,17,2329332,37246324,37200.0,16.0
 tri-small-threads-16,tri,small,30,threads,"@threads",Julia,16,16,44751,2459,2.46,0.0549
 tri-medium-threads-16,tri,medium,300,threads,"@threads",Julia,16,16,75506,287578,288.0,3.81
 tri-large-threads-16,tri,large,3000,threads,"@threads",Julia,16,16,7668205,37243441,37200.0,4.86
@@ -285,12 +245,9 @@ axpy-large-batch-32,axpy,large,10000000,batch,"Polyester @batch",Julia,32,32,123
 axpy-small-omt-32,axpy,small,10000,omt,"OhMyThreads tforeach",Julia,32,32,157002,1540,1.54,0.00981
 axpy-medium-omt-32,axpy,medium,1000000,omt,"OhMyThreads tforeach",Julia,32,32,186013,206213,206.0,1.11
 axpy-large-omt-32,axpy,large,10000000,omt,"OhMyThreads tforeach",Julia,32,32,932076,3593620,3590.0,3.86
-axpy-small-pfor-32,axpy,small,10000,pfor,"pforeach",Julia,32,33,2495,1542,1.54,0.618
-axpy-medium-pfor-32,axpy,medium,1000000,pfor,"pforeach",Julia,32,33,139998,205412,205.0,1.47
-axpy-large-pfor-32,axpy,large,10000000,pfor,"pforeach",Julia,32,33,1643926,3562688,3560.0,2.17
-axpy-small-pfor_aff-32,axpy,small,10000,pfor_aff,"pforeach, affinity",Julia,32,33,2602,1542,1.54,0.593
-axpy-medium-pfor_aff-32,axpy,medium,1000000,pfor_aff,"pforeach, affinity",Julia,32,33,52009,205412,205.0,3.95
-axpy-large-pfor_aff-32,axpy,large,10000000,pfor_aff,"pforeach, affinity",Julia,32,33,118782,3562688,3560.0,30.0
+axpy-small-pfor-32,axpy,small,10000,pfor,"pforeach",Julia,32,33,2605,1540,1.54,0.591
+axpy-medium-pfor-32,axpy,medium,1000000,pfor,"pforeach",Julia,32,33,46921,204423,204.0,4.36
+axpy-large-pfor-32,axpy,large,10000000,pfor,"pforeach",Julia,32,33,112173,4026547,4030.0,35.9
 axpy-small-threads-32,axpy,small,10000,threads,"@threads",Julia,32,32,187795,1540,1.54,0.0082
 axpy-medium-threads-32,axpy,medium,1000000,threads,"@threads",Julia,32,32,174217,206213,206.0,1.18
 axpy-large-threads-32,axpy,large,10000000,threads,"@threads",Julia,32,32,1082210,3593620,3590.0,3.32
@@ -298,10 +255,8 @@ axpy_cold-small-batch-32,axpy_cold,small,10000,batch,"Polyester @batch",Julia,32
 axpy_cold-medium-batch-32,axpy_cold,medium,1000000,batch,"Polyester @batch",Julia,32,32,18440,214726,215.0,11.6
 axpy_cold-small-omt-32,axpy_cold,small,10000,omt,"OhMyThreads tforeach",Julia,32,32,90753,1690,1.69,0.0186
 axpy_cold-medium-omt-32,axpy_cold,medium,1000000,omt,"OhMyThreads tforeach",Julia,32,32,125804,214726,215.0,1.71
-axpy_cold-small-pfor-32,axpy_cold,small,10000,pfor,"pforeach",Julia,32,33,2790,1700,1.7,0.609
-axpy_cold-medium-pfor-32,axpy_cold,medium,1000000,pfor,"pforeach",Julia,32,33,152353,212814,213.0,1.4
-axpy_cold-small-pfor_aff-32,axpy_cold,small,10000,pfor_aff,"pforeach, affinity",Julia,32,33,3300,1700,1.7,0.515
-axpy_cold-medium-pfor_aff-32,axpy_cold,medium,1000000,pfor_aff,"pforeach, affinity",Julia,32,33,74162,212814,213.0,2.87
+axpy_cold-small-pfor-32,axpy_cold,small,10000,pfor,"pforeach",Julia,32,33,2900,1700,1.7,0.586
+axpy_cold-medium-pfor-32,axpy_cold,medium,1000000,pfor,"pforeach",Julia,32,33,70962,211316,211.0,2.98
 axpy_cold-small-threads-32,axpy_cold,small,10000,threads,"@threads",Julia,32,32,100792,1690,1.69,0.0168
 axpy_cold-medium-threads-32,axpy_cold,medium,1000000,threads,"@threads",Julia,32,32,118274,214726,215.0,1.82
 tri-small-batch-32,tri,small,30,batch,"Polyester @batch",Julia,32,32,6765,2460,2.46,0.364
@@ -310,12 +265,9 @@ tri-large-batch-32,tri,large,3000,batch,"Polyester @batch",Julia,32,32,2431138,3
 tri-small-omt-32,tri,small,30,omt,"OhMyThreads tforeach",Julia,32,32,149246,2460,2.46,0.0165
 tri-medium-omt-32,tri,medium,300,omt,"OhMyThreads tforeach",Julia,32,32,177298,287008,287.0,1.62
 tri-large-omt-32,tri,large,3000,omt,"OhMyThreads tforeach",Julia,32,32,1958865,37226440,37200.0,19.0
-tri-small-pfor-32,tri,small,30,pfor,"pforeach",Julia,32,33,2944,2458,2.46,0.835
-tri-medium-pfor-32,tri,medium,300,pfor,"pforeach",Julia,32,33,60658,287336,287.0,4.74
-tri-large-pfor-32,tri,large,3000,pfor,"pforeach",Julia,32,33,1152296,37242950,37200.0,32.3
-tri-small-pfor_aff-32,tri,small,30,pfor_aff,"pforeach, affinity",Julia,32,33,3074,2458,2.46,0.8
-tri-medium-pfor_aff-32,tri,medium,300,pfor_aff,"pforeach, affinity",Julia,32,33,58546,287336,287.0,4.91
-tri-large-pfor_aff-32,tri,large,3000,pfor_aff,"pforeach, affinity",Julia,32,33,1174626,37242950,37200.0,31.7
+tri-small-pfor-32,tri,small,30,pfor,"pforeach",Julia,32,33,3143,2457,2.46,0.782
+tri-medium-pfor-32,tri,medium,300,pfor,"pforeach",Julia,32,33,60330,287608,288.0,4.77
+tri-large-pfor-32,tri,large,3000,pfor,"pforeach",Julia,32,33,1261768,37264335,37300.0,29.5
 tri-small-threads-32,tri,small,30,threads,"@threads",Julia,32,32,157920,2460,2.46,0.0156
 tri-medium-threads-32,tri,medium,300,threads,"@threads",Julia,32,32,171692,287008,287.0,1.67
 tri-large-threads-32,tri,large,3000,threads,"@threads",Julia,32,32,3559430,37226440,37200.0,10.5
@@ -341,12 +293,9 @@ axpy-large-batch-63,axpy,large,10000000,batch,"Polyester @batch",Julia,63,63,598
 axpy-small-omt-63,axpy,small,10000,omt,"OhMyThreads tforeach",Julia,63,63,504704,1693,1.69,0.00335
 axpy-medium-omt-63,axpy,medium,1000000,omt,"OhMyThreads tforeach",Julia,63,63,395886,208918,209.0,0.528
 axpy-large-omt-63,axpy,large,10000000,omt,"OhMyThreads tforeach",Julia,63,63,1294366,4098594,4100.0,3.17
-axpy-small-pfor-63,axpy,small,10000,pfor,"pforeach",Julia,63,64,2576,1542,1.54,0.599
-axpy-medium-pfor-63,axpy,medium,1000000,pfor,"pforeach",Julia,63,64,179044,205565,206.0,1.15
-axpy-large-pfor-63,axpy,large,10000000,pfor,"pforeach",Julia,63,64,1634656,3590310,3590.0,2.2
-axpy-small-pfor_aff-63,axpy,small,10000,pfor_aff,"pforeach, affinity",Julia,63,64,2677,1542,1.54,0.576
-axpy-medium-pfor_aff-63,axpy,medium,1000000,pfor_aff,"pforeach, affinity",Julia,63,64,75767,205565,206.0,2.71
-axpy-large-pfor_aff-63,axpy,large,10000000,pfor_aff,"pforeach, affinity",Julia,63,64,149194,3590310,3590.0,24.1
+axpy-small-pfor-63,axpy,small,10000,pfor,"pforeach",Julia,63,64,2629,1540,1.54,0.586
+axpy-medium-pfor-63,axpy,medium,1000000,pfor,"pforeach",Julia,63,64,99463,203868,204.0,2.05
+axpy-large-pfor-63,axpy,large,10000000,pfor,"pforeach",Julia,63,64,141329,4060147,4060.0,28.7
 axpy-small-threads-63,axpy,small,10000,threads,"@threads",Julia,63,63,588101,1693,1.69,0.00288
 axpy-medium-threads-63,axpy,medium,1000000,threads,"@threads",Julia,63,63,478804,208918,209.0,0.436
 axpy-large-threads-63,axpy,large,10000000,threads,"@threads",Julia,63,63,1257640,4098594,4100.0,3.26
@@ -354,10 +303,8 @@ axpy_cold-small-batch-63,axpy_cold,small,10000,batch,"Polyester @batch",Julia,63
 axpy_cold-medium-batch-63,axpy_cold,medium,1000000,batch,"Polyester @batch",Julia,63,63,1962564,211896,212.0,0.108
 axpy_cold-small-omt-63,axpy_cold,small,10000,omt,"OhMyThreads tforeach",Julia,63,63,219146,1800,1.8,0.00821
 axpy_cold-medium-omt-63,axpy_cold,medium,1000000,omt,"OhMyThreads tforeach",Julia,63,63,275518,211896,212.0,0.769
-axpy_cold-small-pfor-63,axpy_cold,small,10000,pfor,"pforeach",Julia,63,64,2820,1680,1.68,0.596
-axpy_cold-medium-pfor-63,axpy_cold,medium,1000000,pfor,"pforeach",Julia,63,64,176774,213884,214.0,1.21
-axpy_cold-small-pfor_aff-63,axpy_cold,small,10000,pfor_aff,"pforeach, affinity",Julia,63,64,3330,1680,1.68,0.505
-axpy_cold-medium-pfor_aff-63,axpy_cold,medium,1000000,pfor_aff,"pforeach, affinity",Julia,63,64,87191,213884,214.0,2.45
+axpy_cold-small-pfor-63,axpy_cold,small,10000,pfor,"pforeach",Julia,63,64,2970,1690,1.69,0.569
+axpy_cold-medium-pfor-63,axpy_cold,medium,1000000,pfor,"pforeach",Julia,63,64,91262,214216,214.0,2.35
 axpy_cold-small-threads-63,axpy_cold,small,10000,threads,"@threads",Julia,63,63,225006,1800,1.8,0.008
 axpy_cold-medium-threads-63,axpy_cold,medium,1000000,threads,"@threads",Julia,63,63,227727,211896,212.0,0.93
 tri-small-batch-63,tri,small,30,batch,"Polyester @batch",Julia,63,63,6963,2461,2.46,0.353
@@ -366,12 +313,9 @@ tri-large-batch-63,tri,large,3000,batch,"Polyester @batch",Julia,63,63,2923791,3
 tri-small-omt-63,tri,small,30,omt,"OhMyThreads tforeach",Julia,63,63,181198,2461,2.46,0.0136
 tri-medium-omt-63,tri,medium,300,omt,"OhMyThreads tforeach",Julia,63,63,554375,287270,287.0,0.518
 tri-large-omt-63,tri,large,3000,omt,"OhMyThreads tforeach",Julia,63,63,1485226,37298082,37300.0,25.1
-tri-small-pfor-63,tri,small,30,pfor,"pforeach",Julia,63,64,2944,2458,2.46,0.835
-tri-medium-pfor-63,tri,medium,300,pfor,"pforeach",Julia,63,64,69014,287374,287.0,4.16
-tri-large-pfor-63,tri,large,3000,pfor,"pforeach",Julia,63,64,702861,37549772,37500.0,53.4
-tri-small-pfor_aff-63,tri,small,30,pfor_aff,"pforeach, affinity",Julia,63,64,3063,2458,2.46,0.802
-tri-medium-pfor_aff-63,tri,medium,300,pfor_aff,"pforeach, affinity",Julia,63,64,69459,287374,287.0,4.14
-tri-large-pfor_aff-63,tri,large,3000,pfor_aff,"pforeach, affinity",Julia,63,64,665974,37549772,37500.0,56.4
+tri-small-pfor-63,tri,small,30,pfor,"pforeach",Julia,63,64,3160,2457,2.46,0.778
+tri-medium-pfor-63,tri,medium,300,pfor,"pforeach",Julia,63,64,75487,287540,288.0,3.81
+tri-large-pfor-63,tri,large,3000,pfor,"pforeach",Julia,63,64,709514,37210074,37200.0,52.4
 tri-small-threads-63,tri,small,30,threads,"@threads",Julia,63,63,539205,2461,2.46,0.00456
 tri-medium-threads-63,tri,medium,300,threads,"@threads",Julia,63,63,465943,287270,287.0,0.617
 tri-large-threads-63,tri,large,3000,threads,"@threads",Julia,63,63,2188991,37298082,37300.0,17.0
