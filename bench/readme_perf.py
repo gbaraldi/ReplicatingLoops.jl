@@ -20,6 +20,8 @@ pwall = rd("profile/walltime.csv")
 pfill = {r["key"]: r for r in rd("profile/fills.csv")}
 pc2c = rd("profile/c2c.csv")
 same = rd("sameness.csv")
+trixi = rd("trixi.csv")
+pusers = rd("polyester_users.csv")
 few = {r["key"]: r for r in rd("fewlong.csv")}
 
 x = lambda k: f"{float(scal[k]['speedup']):.3g}×"
@@ -128,6 +130,35 @@ def sameval(t, n):
 fewus = lambda t, n, c: float(few[f"pfor-{t}-{n}-{c}"]["us"])
 fewx = lambda t, n, c: f"{float(few[f'pfor-{t}-{n}-{c}']['over_ideal']):.2f}×"
 tbb_tri_us = float(scal["tri-medium-pfor-32"]["serial_ns"]) / 1e3 / float(tri["oneTBB-33-300"]["awake_speedup"])
+
+TRIXI_CASES = [("elixir_euler_source_terms.jl", 5), ("elixir_euler_source_terms.jl", 6),
+               ("elixir_euler_source_terms.jl", 7), ("elixir_euler_taylor_green_vortex.jl", 3),
+               ("elixir_euler_taylor_green_vortex.jl", 4), ("elixir_euler_sedov_blast_wave_sc_subcell.jl", 5)]
+TRIXI_NAME = {"elixir_euler_source_terms.jl": "2D Euler, source terms", "elixir_euler_taylor_green_vortex.jl": "3D Taylor-Green vortex",
+              "elixir_euler_sedov_blast_wave_sc_subcell.jl": "2D Sedov blast, subcell limiter"}
+TRIXI_LOOPS = "6–7"   # counted per rhs! call (bench/trixi/trixi_bench.jl notes)
+
+
+def trixibest(v, e, l, t):
+    xs = [float(r["rhs_min_us"]) for r in trixi if r["variant"] == v and r["elixir"] == e and int(r["level"]) == l and int(r["threads"]) == t]
+    return min(xs) if xs else float("nan")
+
+
+def trixirow(e, l):
+    el = next(r["elements"] for r in trixi if r["elixir"] == e and int(r["level"]) == l)
+    serial = min(trixibest("poly", e, l, 1), trixibest("pfor", e, l, 1))
+    f = lambda v, t: f"{trixibest(v, e, l, t):,.0f} µs"
+    return (f"| {TRIXI_NAME[e]} | {int(el):,} | {serial:,.0f} µs | {f('poly', 8)} | {f('pfor', 8)} | "
+            f"{f('poly', 32)} | {f('pfor', 32)} |")
+
+
+trixiratio = lambda e, l, t: trixibest("pfor", e, l, t) / trixibest("poly", e, l, t)
+trixiperloop = lambda e, l, t: (trixibest("pfor", e, l, t) - trixibest("poly", e, l, t)) / 7
+
+
+def trixiserial():
+    return max(100 * (trixibest("pfor", e, l, 1) / trixibest("poly", e, l, 1) - 1) for e, l in TRIXI_CASES)
+
 
 ATTR = [("tri-300-back_to_back", "300-element triangle, back to back"),
         ("tri-300-after_2_ms_idle", "300-element triangle, after 2 ms idle"),
@@ -300,6 +331,39 @@ round for it. Time, and multiple of that library's ideal:
   the caller alone, so the loop takes up to one iteration longer than ideal.
   After it, the remaining iterations take 50–90 µs longer than ideal at
   32 threads: the time for helpers to start.
+
+### Polyester's users: Trixi.jl
+
+73 packages in the General registry depend on Polyester directly
+(`bench/trixi/polyester_dependents.jl`), among them OrdinaryDiffEqCore,
+FastBroadcast, RecursiveFactorization, LuxLib, Trixi.jl and TrixiParticles.jl.
+Of the {len(pusers)} whose source has `@batch` loops (`bench/results/polyester_users.csv`),
+Trixi.jl has by far the most: {pusers[0]['parallel_loops']}, almost all through its `@threaded` macro,
+{pusers[0]['reduction']} of them reductions. To compare on real code, `bench/trixi/` runs the
+same Trixi commit twice: as it is, and with its `@batch` (and so `@threaded`)
+turned into `@pfor` by a six-line patch, with no change to its loops. Time of
+one right-hand-side evaluation, which runs all of a time step's parallel loops
+except the integrator's (best of 200, best of two runs; the time integrator
+is not threaded in either):
+
+| Elixir | Elements | Serial | Polyester, 8 threads | `pforeach`, 8 | Polyester, 32 | `pforeach`, 32 |
+|---|---|---|---|---|---|---|
+""" + "\n".join(trixirow(e, l) for e, l in TRIXI_CASES) + f"""
+
+- **Polyester is faster on Trixi**, by up to {trixiratio('elixir_euler_source_terms.jl', 5, 32):.1f}x at 32 threads on small meshes;
+  `pforeach` is ahead only on the largest 3D case at 8 threads. Each
+  right-hand side runs only {TRIXI_LOOPS} parallel loops over 512–32,768 elements
+  (`bench/trixi/count_loops.jl`), back to back with little
+  serial work between them: Polyester's workers are still spinning from the
+  previous loop, while `pforeach` starts its helpers again for every loop.
+  The difference per loop is about {trixiperloop('elixir_euler_source_terms.jl', 5, 8):.0f} µs at 8 threads and {trixiperloop('elixir_euler_source_terms.jl', 5, 32):.0f} µs at
+  32: the start-up measured in "Where the remaining time goes" below.
+- **For this kind of code, loops back to back are the real case.** Closing
+  the gap needs helpers that outlive a loop, as Polyester's and the
+  parked-worker designs' do.
+- `@pfor` handles all of Trixi's loops, including the {pusers[0]['reduction']} reductions and the
+  ones that use `continue`, unchanged. On one thread the patched Trixi is
+  {trixiserial():.0f}% slower or less.
 
 ### Where the remaining time goes: Julia or `pforeach`
 

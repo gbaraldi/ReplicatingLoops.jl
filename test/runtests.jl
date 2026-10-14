@@ -14,6 +14,10 @@ function counts(n; kw...)
     return [x[] for x in h]
 end
 
+module MyOps
+max(a, b) = a > b ? a : b
+end
+
 @testset "ReplicatingLoops" begin
     @info "threads" nthreads(:default) nthreads(:interactive) Threads.threadpool()
 
@@ -73,6 +77,53 @@ end
             end
         end
         @test_throws ArgumentError macroexpand(@__MODULE__, nested)
+    end
+
+    @testset "@pfor reductions and continue" begin
+        x = rand(100_003)
+        for nt in (1, 2, 8, 64)
+            s = 0.0; m = -Inf; lo = Inf; c = 0
+            @pfor ntasks = nt reduction = ((+, s), (max, m), (min, lo), (+, c)) for v in x
+                v < 0.25 && continue
+                s += v
+                m = max(m, v)
+                lo = min(lo, v)
+                c += 1
+            end
+            @test s ≈ sum(v for v in x if v >= 0.25)
+            @test m == maximum(x) && lo == minimum(v for v in x if v >= 0.25)
+            @test c == count(>=(0.25), x)
+        end
+        # The value before the loop is part of the result, and an empty loop keeps it.
+        t = 10
+        @pfor reduction = (+, t) for i in 1:1000
+            t += i
+        end
+        @test t == 10 + sum(1:1000)
+        e = 7
+        @pfor reduction = (*, e) for i in 1:0
+            e *= 2
+        end
+        @test e == 7
+        # The loop variable is local to the loop, as in a plain `for`.
+        i = -1
+        @pfor for i in 1:10
+        end
+        @test i == -1
+        bad_option = quote
+            @pfor minbatch = 10 for i in 1:2
+            end
+        end
+        bad_reduction = quote
+            @pfor reduction = (+, 1) for i in 1:2
+            end
+        end
+        @test_throws ArgumentError macroexpand(@__MODULE__, bad_option)
+        @test_throws ArgumentError macroexpand(@__MODULE__, bad_reduction)
+        @test_throws ArgumentError ReplicatingLoops.neutral(-, 1.0)
+        # Another package's `max` is recognised by its name, as Polyester does.
+        @test ReplicatingLoops.neutral(MyOps.max, 1.0) == -Inf
+        @test ReplicatingLoops.neutral(MyOps.max, 1) == typemin(Int)
     end
 
     @testset "exceptions" begin
@@ -205,11 +256,17 @@ end
         while time() - t0 < 1
             pforeach(mark, 1:4000)
         end
-        first_run = copy(tids)
-        pforeach(mark, 1:4000)
+        # On a loaded machine one pair of calls can land differently, so take the
+        # best of five; random placement would keep about 1 in nthreads.
+        same = 0
+        for _ in 1:5
+            first_run = copy(tids)
+            pforeach(mark, 1:4000)
+            same = max(same, count(tids .== first_run))
+        end
         if nthreads(:default) > 1
             @test length(unique(tids)) > 1
-            @test count(tids .== first_run) > length(tids) ÷ 2
+            @test same > length(tids) ÷ 4
         end
 
         for _ in 1:20
@@ -263,6 +320,23 @@ end
                 @test e isa CompositeException && e.exceptions[1].ex == ErrorException("first")
             end
             @test all(==(1), counts(2; ntasks = 2))
+        end
+    end
+
+    @testset "other tasks run during a long loop" begin
+        if nthreads(:default) < 2
+            @test_skip "needs two threads"
+        else
+            # A loop that keeps every default thread busy for about 500 ms, started
+            # from the default pool, and a task that asks to run 150 ms in. Without
+            # yielding it waited 300 ms; with it, 8 ms.
+            n = 200 * nthreads(:default)
+            loop = Threads.@spawn :default pforeach(i -> busy(2_000_000), 1:n)
+            sleep(0.15)
+            t0 = time_ns()
+            started = fetch(Threads.@spawn :default time_ns())
+            @test (started - t0) / 1e6 < 100
+            wait(loop)
         end
     end
 

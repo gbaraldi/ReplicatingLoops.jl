@@ -12,6 +12,7 @@ const EARLY_NS = 40_000      # predicted work worth sharing without waiting a he
 const CHUNK_NS = 20_000      # target length of one chunk
 const WATCH_NS = 20_000      # how long a first iteration may run before help is sent
 const SPIN_NS = 20_000       # how long the caller spins before blocking
+const YIELD_NS = 1_000_000   # after this much work, let tasks waiting for the thread run
 const PENDING = 8           # helpers started but not running yet, plus 2 per running one
 
 const CLOSED = typemax(Int) >> 1  # `next` value once nothing more is handed out
@@ -82,6 +83,12 @@ function (b::Body)(c::Chunk)
     return nothing
 end
 
+# A body that takes the whole chunk, `f(lo, hi)`, as `@pfor` generates.
+struct Chunks{F}
+    f::F
+end
+(b::Chunks)(c::Chunk) = (b.f(c.lo, c.hi); nothing)
+
 mutable struct Loop
     @atomic next::Int                   # iterations handed out so far, until the split
     @atomic left::Int                   # iterations not finished yet
@@ -113,7 +120,7 @@ end
 # sides, which needs seq_cst so the caller and the last task cannot both miss
 # each other. Everything the caller writes before starting a helper, including
 # `blocks`, is published by `schedule` when it starts a helper.
-Loop(body::Body, n::Int, maxhelpers::Int) =
+Loop(@nospecialize(body), n::Int, maxhelpers::Int) =
     Loop(0, n, 0, 0, 0, 0.0, false, nothing, nothing,
          body, n, maxhelpers, NO_BLOCKS, 0, UInt64(0), UInt(0))
 
@@ -186,7 +193,7 @@ function work!(r::Loop, caller::Bool, helper::Int = 0)
     claimed = 0
     est = caller ? 0.0 : @atomic :monotonic r.ns_per_iter
     k = est > 0 ? typemax(Int) >> 2 : 1   # capped by chunk_size before use
-    t0 = t = last = time_ns()
+    t0 = t = last = tyield = time_ns()
     c = Chunk(0, 0)
     home = 0   # the block this task starts on; `j` counts the blocks it has finished
     j = 0
@@ -256,6 +263,12 @@ function work!(r::Loop, caller::Bool, helper::Int = 0)
                 k *= 4
             end
             t = now
+            if now - tyield >= YIELD_NS
+                # Yielding when nobody waits costs a wake-up (8-10% on loops of
+                # 1 ms iterations), so only then.
+                others_waiting() && (yield(); t = time_ns())
+                tyield = t
+            end
         end
     catch e
         claimed += cancel!(r, e, catch_backtrace())
@@ -454,6 +467,17 @@ function abort!(r::Loop, e, bt)
     end
 end
 
+# Whether another task is waiting for a thread of this pool. Julia's tasks only
+# switch when one yields, so without this a long loop would keep every other
+# task in the pool waiting until it ends. Uses Base internals (1.10 to 1.14);
+# without them, assume a task is waiting.
+@static if isdefined(Base, :Partr) && isdefined(Base.Partr, :multiq_check_empty) &&
+           isdefined(Base, :workqueue_for)
+    others_waiting() = !Base.Partr.multiq_check_empty() || !isempty(Base.workqueue_for(threadid()))
+else
+    others_waiting() = true
+end
+
 # The caller runs iterations too, so a caller outside the default pool adds one.
 default_ntasks() = nthreads(:default) + (threadpool() === :default ? 0 : 1)
 
@@ -490,12 +514,26 @@ finish.
 # elements), and the entry is small, so a new body even compiles a little faster.
 function pforeach(f::F, xs::AbstractArray; ntasks::Integer = default_ntasks()) where {F}
     isempty(xs) && return nothing
-    n = length(xs)
-    maxhelpers = min(max(Int(ntasks), 1), n) - 1   # never more tasks than elements
+    return run_loop(Body(f, xs), length(xs), Int(ntasks), f)
+end
+
+"""
+    ReplicatingLoops.pforeach_chunks(f, n; ntasks)
+
+Like `pforeach`, but call `f(lo, hi)` once per chunk of the positions `1:n`
+instead of once per element. `@pfor` is built on this.
+"""
+function pforeach_chunks(f::F, n::Integer; ntasks::Integer = default_ntasks()) where {F}
+    n <= 0 && return nothing
+    return run_loop(Chunks(f), Int(n), Int(ntasks), f)
+end
+
+function run_loop(@nospecialize(body), n::Int, ntasks::Int, @nospecialize(f))
+    maxhelpers = min(max(ntasks, 1), n) - 1   # never more tasks than elements
     # Every task may add one claim past CLOSED after a failure; keep that in range.
     n <= CLOSED ÷ (maxhelpers + 1) ||
         throw(ArgumentError("pforeach supports at most $(CLOSED ÷ (maxhelpers + 1)) elements with ntasks = $ntasks"))
-    r = Loop(Body(f, xs), n, maxhelpers)
+    r = Loop(body, n, maxhelpers)
     # Loops that may be a few long iterations get a watcher (see `watch!`).
     2 <= n <= min(maxhelpers + 1, default_ntasks()) && (r.site = site_key(f))
     claimed = work!(r, true)
@@ -518,13 +556,50 @@ end
 
 pforeach(f, itr; kw...) = pforeach(f, collect(itr); kw...)
 
+# The elements at linear positions lo:hi of `xs`, for the loops `@pfor` writes.
+struct Span{A}
+    xs::A
+    lo::Int
+    hi::Int
+end
+Base.iterate(s::Span, k::Int = s.lo) = k > s.hi ? nothing : (@inbounds(s.xs[k]), k + 1)
+Base.length(s::Span) = max(s.hi - s.lo + 1, 0)
+Base.eltype(::Type{Span{A}}) where {A} = eltype(A)
+
+as_array(xs::AbstractArray) = xs
+as_array(itr) = collect(itr)
+
+# The value each chunk starts a reduction from.
+neutral(::typeof(+), x) = zero(x)
+neutral(::typeof(*), x) = one(x)
+neutral(::typeof(max), x) = typemin(typeof(x))
+neutral(::typeof(min), x) = typemax(typeof(x))
+neutral(::typeof(&), x) = ~zero(x)
+neutral(::typeof(|), x) = zero(x)
+# Other functions by name, as Polyester does: packages define their own `max`.
+neutral(op::Function, x) = neutral(Val(nameof(op)), x)
+neutral(::Val{:+}, x) = zero(x)
+neutral(::Val{:*}, x) = one(x)
+neutral(::Val{:max}, x) = typemin(typeof(x))
+neutral(::Val{:min}, x) = typemax(typeof(x))
+neutral(::Val{:&}, x) = ~zero(x)
+neutral(::Val{:|}, x) = zero(x)
+neutral(op, x) = throw(ArgumentError("@pfor: no neutral element known for reduction operator $op; use +, *, max, min, & or | (or functions with those names)"))
+
 """
-    @pfor [ntasks=n] for x in xs
+    @pfor [ntasks=n] [reduction=(op, v)] for x in xs
         ...
     end
 
-Run the loop body for each element of `xs` in parallel. Same as
-`pforeach(x -> body, xs; ntasks)`.
+Run the loop body for each element of `xs` in parallel, like
+`pforeach(x -> body, xs; ntasks)`. The body runs inside a real `for` loop over
+each chunk, so `continue` works and the loop variable is local to the loop.
+
+With `reduction=(op, v)`, or several as `reduction=((op1, v1), (op2, v2))`,
+the body may update `v` with `v = op(v, ...)`. Each chunk starts from the
+neutral element of `op` (`+`, `*`, `max`, `min`, `&` or `|`), and afterwards
+`v` holds `op` of its value before the loop and every chunk's result, as with
+Polyester's `@batch reduction=...`.
 """
 macro pfor(args...)
     isempty(args) && throw(ArgumentError("@pfor needs a `for` loop"))
@@ -534,12 +609,50 @@ macro pfor(args...)
     Meta.isexpr(spec, :(=)) ||
         throw(ArgumentError("@pfor supports a single `for x in xs` loop"))
     var, itr = spec.args
-    kws = map(args[1:end-1]) do a
+    kws = Expr[]
+    reds = Tuple{Any,Symbol}[]
+    for a in args[1:end-1]
         Meta.isexpr(a, :(=)) || throw(ArgumentError("expected `name=value`, got `$a`"))
-        Expr(:kw, a.args[1], esc(a.args[2]))
+        name, val = a.args
+        if name === :ntasks
+            push!(kws, Expr(:kw, :ntasks, esc(val)))
+        elseif name === :reduction
+            pairs = Meta.isexpr(val, :tuple) && all(x -> Meta.isexpr(x, :tuple), val.args) ? val.args : [val]
+            for p in pairs
+                Meta.isexpr(p, :tuple) && length(p.args) == 2 && p.args[2] isa Symbol ||
+                    throw(ArgumentError("expected `reduction=(op, variable)`, got `$p`"))
+                push!(reds, (p.args[1], p.args[2]))
+            end
+        else
+            throw(ArgumentError("@pfor supports the options `ntasks` and `reduction`, got `$name`"))
+        end
     end
-    f = Expr(:->, Expr(:tuple, var), body)
-    return :(pforeach($(esc(f)), $(esc(itr)); $(kws...)))
+    xs, off, lo, hi, acc, lk = gensym.((:xs, :off, :lo, :hi, :acc, :lock))
+    vars = [esc(v) for (_, v) in reds]
+    ops = [esc(op) for (op, _) in reds]
+    chunk = quote
+        $([:(local $v = neutral($op, $acc[][$i])) for (i, (op, v)) in enumerate(zip(ops, vars))]...)
+        for $(esc(var)) in Span($xs, $off + $lo, $off + $hi)
+            $(esc(body))
+        end
+        $(isempty(reds) ? nothing : quote
+            lock($lk)
+            try
+                $acc[] = ($([:($op($acc[][$i], $v)) for (i, (op, v)) in enumerate(zip(ops, vars))]...),)
+            finally
+                unlock($lk)
+            end
+        end)
+        nothing
+    end
+    run = quote
+        let $xs = as_array($(esc(itr))), $off = firstindex($xs) - 1,
+            $acc = Ref(($(vars...),)), $lk = Threads.SpinLock()
+            pforeach_chunks(($lo, $hi) -> $chunk, length($xs); $(kws...))
+            $acc[]
+        end
+    end
+    return isempty(reds) ? :($run; nothing) : :(($(vars...),) = $run; nothing)
 end
 
 # Compile the scheduling code into the package image, so a session's first loop
@@ -562,6 +675,11 @@ if ccall(:jl_generating_output, Cint, ()) == 1
         busy = i -> (t = time_ns(); while time_ns() - t < 2_000; end; x[i] = i)
         pforeach(busy, 1:64; ntasks = 2)
         pforeach(busy, 1:2; ntasks = 2)
+        total = 0.0
+        @pfor ntasks = 2 reduction = (+, total) for i in 1:64
+            busy(i)
+            total += x[i]
+        end
         yield()
     end
 end

@@ -17,6 +17,15 @@ end
 @pfor ntasks = 4 for (i, xi) in enumerate(x)
     y[i] = 2xi
 end
+
+# Reductions, as with Polyester's `@batch reduction=...`:
+total = 0.0
+biggest = -Inf
+@pfor reduction = ((+, total), (max, biggest)) for v in x
+    v < 0 && continue
+    total += v
+    biggest = max(biggest, v)
+end
 ```
 
 `pforeach(f, xs; ntasks)` calls `f(x)` for every element of `xs` (any
@@ -24,6 +33,13 @@ end
 work on the loop, the caller included. It defaults to the number of threads in
 the default pool, plus one when the caller runs outside it (the main task runs
 on the interactive thread by default on Julia 1.12 and later).
+
+`@pfor` runs the loop body inside a real `for` loop over each chunk, so
+`continue` works and the loop variable is local to the loop. With
+`reduction = (op, v)` (or several as a tuple of pairs) for `op` one of `+`,
+`*`, `max`, `min`, `&`, `|` (or a function with one of those names), each chunk
+starts `v` from `op`'s neutral element, and afterwards `v` holds `op` of its
+value before the loop and every chunk's result.
 
 ## How it works
 
@@ -93,6 +109,13 @@ Here the caller starts running iterations immediately and times them:
   7–11 µs), so each loop body type remembers, in a 256-entry table, whether
   its first iteration took 20 µs or more the last time, and only a new body
   or one that was slow last time gets the helper.
+- **Yielding.** Julia's tasks only switch when one yields, so a long loop
+  would keep every other task in the default pool waiting until it ends.
+  After each millisecond of work, a task yields if another task is waiting for
+  a thread of its pool (checked through Julia's scheduler internals, about
+  50 ns). While a 26 ms loop kept every thread busy, a task in the default pool
+  waited 0.4 ms to start instead of 23 ms. Yielding unconditionally would cost
+  8–10% on loops of 1 ms iterations, since resuming can mean waking a thread.
 - **Waiting.** When nothing is left to take, the caller spins for up to 20 µs
   for the other tasks to finish their last chunks, then blocks. Helpers never
   wait: a helper that finds no work left just returns. The caller never waits
@@ -155,7 +178,10 @@ was removed.
   the interactive thread when called from the REPL or a script's main task.
 - **First call.** A new loop body is compiled on its first chunk, on the
   caller. Short first calls may finish before any helper joins.
-- No reductions yet; use per-index outputs or per-chunk accumulators.
+- Reductions only through `@pfor`; `pforeach` itself has none.
+- **Loops back to back.** Helpers are started anew for every loop and exit
+  when it ends, so a series of parallel loops with little serial work between
+  them pays the start-up each time; see the Trixi.jl results below.
 
 ## Performance
 
@@ -349,6 +375,44 @@ round for it. Time, and multiple of that library's ideal:
   After it, the remaining iterations take 50–90 µs longer than ideal at
   32 threads: the time for helpers to start.
 
+### Polyester's users: Trixi.jl
+
+73 packages in the General registry depend on Polyester directly
+(`bench/trixi/polyester_dependents.jl`), among them OrdinaryDiffEqCore,
+FastBroadcast, RecursiveFactorization, LuxLib, Trixi.jl and TrixiParticles.jl.
+Of the 18 whose source has `@batch` loops (`bench/results/polyester_users.csv`),
+Trixi.jl has by far the most: 408, almost all through its `@threaded` macro,
+50 of them reductions. To compare on real code, `bench/trixi/` runs the
+same Trixi commit twice: as it is, and with its `@batch` (and so `@threaded`)
+turned into `@pfor` by a six-line patch, with no change to its loops. Time of
+one right-hand-side evaluation, which runs all of a time step's parallel loops
+except the integrator's (best of 200, best of two runs; the time integrator
+is not threaded in either):
+
+| Elixir | Elements | Serial | Polyester, 8 threads | `pforeach`, 8 | Polyester, 32 | `pforeach`, 32 |
+|---|---|---|---|---|---|---|
+| 2D Euler, source terms | 1,024 | 692 µs | 124 µs | 214 µs | 85 µs | 365 µs |
+| 2D Euler, source terms | 4,096 | 2,772 µs | 394 µs | 469 µs | 153 µs | 428 µs |
+| 2D Euler, source terms | 16,384 | 11,523 µs | 1,467 µs | 1,486 µs | 426 µs | 767 µs |
+| 3D Taylor-Green vortex | 512 | 3,467 µs | 678 µs | 740 µs | 258 µs | 472 µs |
+| 3D Taylor-Green vortex | 4,096 | 29,802 µs | 4,130 µs | 3,875 µs | 1,309 µs | 1,518 µs |
+| 2D Sedov blast, subcell limiter | 1,024 | 2,674 µs | 428 µs | 541 µs | 167 µs | 353 µs |
+
+- **Polyester is faster on Trixi**, by up to 4.3x at 32 threads on small meshes;
+  `pforeach` is ahead only on the largest 3D case at 8 threads. Each
+  right-hand side runs only 6–7 parallel loops over 512–32,768 elements
+  (`bench/trixi/count_loops.jl`), back to back with little
+  serial work between them: Polyester's workers are still spinning from the
+  previous loop, while `pforeach` starts its helpers again for every loop.
+  The difference per loop is about 13 µs at 8 threads and 40 µs at
+  32: the start-up measured in "Where the remaining time goes" below.
+- **For this kind of code, loops back to back are the real case.** Closing
+  the gap needs helpers that outlive a loop, as Polyester's and the
+  parked-worker designs' do.
+- `@pfor` handles all of Trixi's loops, including the 50 reductions and the
+  ones that use `continue`, unchanged. On one thread the patched Trixi is
+  5% slower or less.
+
 ### Where the remaining time goes: Julia or `pforeach`
 
 To tell Julia's costs from the scheduler's own, the same scheduler ran with
@@ -418,6 +482,8 @@ change on the same machine.
 | Before the first helper, chunks of at most 2.5 µs of predicted work | 300-element triangle | 32 | 61.1 µs | 61.3 µs | no |
 | pforeach entry specialized on the loop body (the scheduler still is not) | 64-element loop of cheap iterations | 32 | 540 ns | 253 ns | yes: and a new body compiles in 14 instead of 17 ms |
 | Block claims with one lock xadd instead of the compare-and-swap loop Julia emits for atomic + | 1M-element axpy, back to back | 32 | 53.6 µs | 53.9 µs | no: no measurable difference; the claims are rarely contended |
+| After each 1 ms of work, yield if another task is waiting for a thread | time a default-pool task waits to start while a 26 ms loop uses every thread | 32 | 22606 µs | 425 µs | yes |
+| After each 1 ms of work, always yield | 32 iterations of 1 ms | 32 | 1069 µs | 1400 µs | no: resuming can wake another thread |
 
 ### Profiles
 

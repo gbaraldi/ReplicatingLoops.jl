@@ -27,3 +27,5 @@ globalq,"A global limit on queued helpers, one per thread","300k-element axpy, b
 precap,"Before the first helper, chunks of at most 2.5 µs of predicted work","300-element triangle",32,61.1,61.3,µs,no
 specentry,"pforeach entry specialized on the loop body (the scheduler still is not)","64-element loop of cheap iterations",32,540,253,ns,"yes: and a new body compiles in 14 instead of 17 ms"
 xadd,"Block claims with one lock xadd instead of the compare-and-swap loop Julia emits for atomic +","1M-element axpy, back to back",32,53.6,53.9,µs,"no: no measurable difference; the claims are rarely contended"
+yield,"After each 1 ms of work, yield if another task is waiting for a thread","time a default-pool task waits to start while a 26 ms loop uses every thread",32,22606,425,µs,yes
+yieldall,"After each 1 ms of work, always yield","32 iterations of 1 ms",32,1069,1400,µs,"no: resuming can wake another thread"
