@@ -1,0 +1,9 @@
+id,change,measure,threads,before,after,unit,kept
+compile,"Scheduler code no longer specialized on the loop body, and precompiled","first call of a new loop body (helpers must compile)",8,128.7,18.6,ms,yes
+counter,"No shared counter updated on every chunk claim (affinity)","1M-element axpy, affinity, back to back",32,177.5,91,µs,yes
+chunks,"Steals take at least 1 µs; timing only from chunks of at least 1 µs; skip empty blocks","1M-element axpy, affinity, back to back",32,109.5,89.5,µs,yes
+flat,"Affinity blocks in one flat array instead of one object per block","1M-element axpy, affinity, back to back (warm helpers on)",32,67,47,µs,yes
+eager,"New helpers ask for two more whenever 10 µs of work is left","300-element triangle, default mode",32,65.5,55.5,µs,yes
+warm,"Helpers wait 50 µs for the next loop (warm helpers)","1M-element axpy, affinity, back to back",32,68.5,42,µs,"no: back-to-back loops are not a realistic case"
+coop,"Helpers started greedily from a shared counter by every task (cooperative wake-up)","1M-element axpy, affinity, after 2 ms idle (1.13)",32,100.3,68.8,µs,yes
+pending,"At most 8 helpers (plus 2 per running one) started but not yet running","stress test: loops finished in 30 s, 2 loops per thread at once (nightly)",63,51142,137899,loops,yes
